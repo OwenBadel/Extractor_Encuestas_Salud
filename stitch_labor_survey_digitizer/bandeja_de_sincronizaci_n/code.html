@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Field Survey - Sync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdbce",
+                      "inverse-surface": "#e5e2e1",
+                      "secondary-fixed-dim": "#ffb59a",
+                      "on-surface": "#e5e2e1",
+                      "tertiary-fixed": "#b0ecff",
+                      "surface": "#131313",
+                      "surface-container-high": "#2a2a2a",
+                      "on-secondary-fixed-variant": "#802a00",
+                      "on-surface-variant": "#d5c4ab",
+                      "surface-container-low": "#1c1b1b",
+                      "tertiary-fixed-dim": "#17d8ff",
+                      "on-tertiary": "#003641",
+                      "inverse-primary": "#7c5800",
+                      "outline": "#9e8f78",
+                      "on-tertiary-container": "#005a6b",
+                      "on-primary-container": "#6b4c00",
+                      "on-error": "#690005",
+                      "surface-container": "#201f1f",
+                      "inverse-on-surface": "#313030",
+                      "error-container": "#93000a",
+                      "on-secondary": "#5a1b00",
+                      "primary-fixed": "#ffdea8",
+                      "on-secondary-fixed": "#370e00",
+                      "outline-variant": "#514532",
+                      "surface-container-highest": "#353534",
+                      "on-secondary-container": "#531900",
+                      "on-primary-fixed-variant": "#5e4200",
+                      "on-primary-fixed": "#271900",
+                      "on-tertiary-fixed": "#001f27",
+                      "surface-tint": "#ffba20",
+                      "surface-variant": "#353534",
+                      "secondary-container": "#ff5e07",
+                      "background": "#131313",
+                      "surface-dim": "#131313",
+                      "tertiary": "#abebff",
+                      "on-primary": "#412d00",
+                      "on-error-container": "#ffdad6",
+                      "primary": "#ffdca1",
+                      "primary-container": "#ffb800",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-bright": "#393939",
+                      "tertiary-container": "#00d7fe",
+                      "primary-fixed-dim": "#ffba20",
+                      "on-background": "#e5e2e1",
+                      "secondary": "#ffb59a",
+                      "on-tertiary-fixed-variant": "#004e5d",
+                      "error": "#ffb4ab"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter-md": "24px",
+                      "unit": "8px",
+                      "margin-edge": "32px",
+                      "touch-target": "48px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "data-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "label-caps": [
+                              "JetBrains Mono"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom progress bar animation */
+        @keyframes sync-progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-sync {
+            animation: sync-progress 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface border-b-2 border-outline-variant flex items-center justify-between px-margin-edge h-touch-target">
+<button class="h-touch-target w-touch-target flex items-center justify-center -ml-4 text-primary active:scale-95 transition-transform hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface truncate">Field Survey</h1>
+<button class="h-touch-target w-touch-target flex items-center justify-center -mr-4 text-primary active:scale-95 transition-transform hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-[24px]">cloud_sync</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col px-margin-edge pt-gutter-md pb-[180px] gap-gutter-md">
+<!-- Summary Badge -->
+<div class="bg-surface-container-high border-2 border-outline-variant p-gutter-md flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[28px] icon-fill">sync</span>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">12</h2>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Encuestas listas para sincronizar</p>
+</div>
+</div>
+<!-- Survey List Grid -->
+<div class="grid grid-cols-1 gap-unit">
+<!-- Card 1: Pending -->
+<div class="bg-surface-container border-2 border-outline-variant p-gutter-md flex flex-col gap-4 relative overflow-hidden">
+<div class="flex justify-between items-start border-b border-outline-variant pb-2">
+<div class="font-data-lg text-data-lg text-on-surface">ID: TEMP-001</div>
+<div class="border-2 border-outline text-on-surface font-label-caps text-label-caps px-2 py-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>PENDIENTE</span>
+</div>
+</div>
+<div class="flex gap-2 mt-2">
+<div class="w-16 h-16 bg-cover bg-center border-2 border-outline bg-surface-container-highest" data-alt="A close-up, high-contrast industrial photograph of an electrical junction box mounted on a concrete wall. The lighting is harsh and direct, highlighting the metallic textures and worn warning labels. The mood is gritty and utilitarian, emphasizing field work conditions. Color palette relies on deep greys, stark whites, and pops of faded safety yellow." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBwplONgq2wtdvOgblOS6pfVSw84GYOZE3Bkj6AimWkzurpulerk6rT9x4hrc0xMeRd3-HtKViCzvJxdAO55PTLcyBMw5C6nSH_2oqNYNNljdcf52BIvA8qTQyltHkkGdaHhAfbpCPcg-CfGxKSl7hKReVp0ETWsDtZ8YDVRIxze3gDToAMs8MudhJT3v7zAx0gvPtPAxoVds0xkvwtwrxVWFr-GooLJHJbtq2N_MeTuC7hOOimR39AMw')"></div>
+<div class="w-16 h-16 bg-cover bg-center border-2 border-outline bg-surface-container-highest" data-alt="A detailed shot of a ruggedized tablet screen displaying a topographic map. The screen glows brightly against a dark, out-of-focus background of dense foliage. The scene implies nighttime field operation. The aesthetic is tech-focused and resilient, utilizing deep blacks and vibrant neon green UI elements." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLziYBQ2dLwys4WmAkrqb_evF5FvwQ1rTzGI3hK1UVYTa2v0hG20pG_IWp56ZESR0UaiHThyTeCpPvUf69whUB6TvsUb9qFapwT4dqjWlDu5SZpn0NqIezhnDcUPbJU6J7u0TeNVa9O6u8UcVI0qDwCPcLH9UyP1DUNF-1Mr9jTv1HUVlgLzRP3I0kC5w8Chac5tfq5pCvguQCn0i4winovH18E5Q1ja9exro1obe_ABZs6TnRrbaRrQ')"></div>
+</div>
+</div>
+<!-- Card 2: Sent -->
+<div class="bg-surface-container border-2 border-outline-variant p-gutter-md flex flex-col gap-4 relative overflow-hidden opacity-70">
+<div class="flex justify-between items-start border-b border-outline-variant pb-2">
+<div class="font-data-lg text-data-lg text-on-surface-variant">ID: TSK-882</div>
+<div class="bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps px-2 py-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] icon-fill">check_circle</span>
+<span>ENVIADO</span>
+</div>
+</div>
+<div class="flex gap-2 mt-2">
+<div class="w-16 h-16 bg-cover bg-center border-2 border-outline-variant bg-surface-container-highest" data-alt="A low-angle perspective of a massive industrial pipeline stretching across a barren landscape under a blazing midday sun. The harsh lighting casts stark black shadows beneath the structure. The mood is desolate yet functional. The visual style features high-contrast earth tones and metallic silver." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQX5PsVr5IeunmY6HHK6dCFWWNQ-EId8AA-fKXx0dnXGFtkffMvTMLkHqzHZ5osLx2r5u2tBSfmpJ-w_tlJjldNFcKVtZ289MUvmuCjkLchyYSoqeh3lVCqEjbYv9bKFet7XTcklxojBpkYQfEOt-Wb9kww_k053fTgdzic2qnvBrv3i4TtrpsncqYqSsjtPhhzu3KSU5ER3LzVE3Y-kbi8Xv_QVF-7mhErsiiBkqXAAk-1_wMAkYG1w')"></div>
+</div>
+</div>
+<!-- Card 3: Pending -->
+<div class="bg-surface-container border-2 border-outline-variant p-gutter-md flex flex-col gap-4 relative overflow-hidden">
+<div class="flex justify-between items-start border-b border-outline-variant pb-2">
+<div class="font-data-lg text-data-lg text-on-surface">ID: TEMP-002</div>
+<div class="border-2 border-outline text-on-surface font-label-caps text-label-caps px-2 py-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>PENDIENTE</span>
+</div>
+</div>
+<div class="flex gap-2 mt-2">
+<div class="w-16 h-16 bg-cover bg-center border-2 border-outline bg-surface-container-highest" data-alt="A macroscopic view of soil sampling equipment embedded in dark, moist earth. The lighting suggests early morning overcast conditions, providing even, flat illumination. The texture of the soil and metallic grooves of the tool are extremely detailed. The mood is scientific and objective, dominating by deep browns and brushed steel grey." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAk_HlkFF2clWwvtJyyfcdgde5-yFxq7MAtc4p7J5QLSDFcKLAAy98f1lSSR8aEyhDZtMo5wqg4_gkTkK2crXtMqWDtZfTgYcmKV6M-_PG2g4oqGwdAOcdXpNpXl_ttLM7wuXmtA_uo4gmnqQUXy00va3tto5oBV0OrbzkckJaVbv5uA0rECyZ-z3fyBsERjEhZS33OpPt-YQCQfEjxsm5S26ZLNRNVhKROHCT41mFzfwEmpbaYjan8qQ')"></div>
+<div class="w-16 h-16 bg-cover bg-center border-2 border-outline bg-surface-container-highest" data-alt="A focused image of a gloved hand writing on a weatherproof clipboard with a thick permanent marker. The background is an out-of-focus construction site. The lighting is bright daylight, creating sharp contrast. The aesthetic emphasizes raw utility and physical labor, utilizing bright safety orange and stark white." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAhJVsnDNazKXIAEp3ZBqWT4vwLPPG59x5nD53xALLsTNdUkuxu9uODfsBp5bjvakWbr5HpxLaiOkCZIvTK7RL9TKcXCu1wES17q0fHPcOuSRBQ3YNN2EfNULNia2ARDr35KPTt3V46XtwOby548QQeJbzIlN86xBS_I2Yk0P1TQPuLjeWiRbtoZfI9QPsQecC67N2paQg1pBfMdEgQSzqgi2553tXuPenjj4fx-9WOzINif53HCrI-9A')"></div>
+<div class="w-16 h-16 bg-cover bg-center border-2 border-outline bg-surface-container-highest" data-alt="A wide shot of a drone hovering near a high-voltage transmission tower. The sky is a flat, cloudless grey, ensuring the intricate lattice structure of the tower stands out starkly. The mood is serious and technical. The color palette is almost monochromatic, relying on varying shades of grey and black silhouette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBS5-O6dA79wefIL7NP8-nEnLfBqaW4_FflW3Ad6MDtLY9tf0VS40lND2hgZxGlSphYWNykpk6-OpDeGvOgHRDVfdF-Q41w_QEc-hSxo8dW8QPZ0-G9if8jzHgrvjoGosYMY5GB7TlVbGsC7zHoMF2Bh192SQPNCtW3G0IqYUXdAhkd3Sxas6xvYNn8Ucscvc0XXMftTiZ1HPSBePK9mM9GfJMkDiARJTk_y6VcP0myWmldW838D2LUzA')"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Action Area (Above Nav) -->
+<div class="fixed bottom-20 left-0 w-full px-margin-edge py-gutter-md bg-surface border-t-2 border-outline-variant z-40">
+<!-- Default State: Button -->
+<button class="w-full h-[64px] bg-primary-container text-on-primary-container font-data-lg text-data-lg flex items-center justify-center gap-2 border-2 border-on-primary-container active:bg-surface-tint transition-colors" id="syncButton">
+<span class="material-symbols-outlined icon-fill">cloud_upload</span>
+            Sincronizar Lote
+        </button>
+<!-- Progress State (Hidden initially) -->
+<div class="hidden w-full h-[64px] flex-col justify-center gap-2" id="syncProgress">
+<div class="flex justify-between items-center px-1">
+<span class="font-label-caps text-label-caps text-on-surface uppercase">Procesando envíos...</span>
+<span class="material-symbols-outlined text-primary-container animate-spin text-[18px]">sync</span>
+</div>
+<div class="w-full h-3 bg-surface-container-high border-2 border-outline-variant overflow-hidden">
+<div class="h-full bg-primary-container w-0" id="progressBarFill"></div>
+</div>
+</div>
+<!-- Success State (Hidden initially) -->
+<div class="hidden w-full h-[64px] bg-tertiary-container border-2 border-on-tertiary-container flex items-center justify-center gap-2 text-on-tertiary-container font-data-lg text-data-lg" id="syncSuccess">
+<span class="material-symbols-outlined icon-fill">cloud_done</span>
+            Sincronización Completa
+        </div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe bg-surface-container border-t-2 border-outline-variant h-20">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest h-full w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-label-caps text-label-caps mt-1">Overview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest h-full w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined text-[24px]">assignment</span>
+<span class="font-label-caps text-label-caps mt-1">Forms</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1 h-[60px] w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined text-[24px] icon-fill">sync</span>
+<span class="font-label-caps text-label-caps mt-1 text-primary">Sync</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest h-full w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="font-label-caps text-label-caps mt-1">Settings</span>
+</a>
+</nav>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('syncButton');
+            const progressContainer = document.getElementById('syncProgress');
+            const successContainer = document.getElementById('syncSuccess');
+            const fill = document.getElementById('progressBarFill');
+
+            if(btn && progressContainer && successContainer && fill) {
+                btn.addEventListener('click', () => {
+                    // Hide button, show progress
+                    btn.classList.add('hidden');
+                    progressContainer.classList.remove('hidden');
+                    progressContainer.classList.add('flex');
+                    
+                    // Start animation
+                    fill.classList.add('animate-sync');
+
+                    // Listen for animation end
+                    fill.addEventListener('animationend', () => {
+                        // Hide progress, show success
+                        progressContainer.classList.add('hidden');
+                        progressContainer.classList.remove('flex');
+                        
+                        successContainer.classList.remove('hidden');
+                        successContainer.classList.add('flex');
+
+                        // Optional: Reset after a few seconds
+                        setTimeout(() => {
+                            successContainer.classList.add('hidden');
+                            successContainer.classList.remove('flex');
+                            btn.classList.remove('hidden');
+                            fill.classList.remove('animate-sync');
+                        }, 3000);
+                    }, { once: true });
+                });
+            }
+        });
+    </script>
+</body></html>

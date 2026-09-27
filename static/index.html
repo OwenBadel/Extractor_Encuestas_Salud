@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>Field Survey - Extractor de Encuestas de Salud</title>
+
+    <!-- Tailwind CSS con soporte para formularios y container queries -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Fuentes Google: Inter, JetBrains Mono y Material Symbols Outlined -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Configuración del Sistema de Diseño Kinetic Field System -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#131313",
+                        "surface-dim": "#131313",
+                        "surface-bright": "#393939",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container": "#201f1f",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-highest": "#353534",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#d5c4ab",
+                        "inverse-surface": "#e5e2e1",
+                        "inverse-on-surface": "#313030",
+                        "outline": "#9e8f78",
+                        "outline-variant": "#514532",
+                        "surface-tint": "#ffba20",
+                        "primary": "#ffdca1",
+                        "on-primary": "#412d00",
+                        "primary-container": "#ffb800",
+                        "on-primary-container": "#6b4c00",
+                        "primary-fixed": "#ffdea8",
+                        "primary-fixed-dim": "#ffba20",
+                        "secondary": "#ffb59a",
+                        "on-secondary": "#5a1b00",
+                        "secondary-container": "#ff5e07",
+                        "on-secondary-container": "#531900",
+                        "tertiary": "#abebff",
+                        "on-tertiary": "#003641",
+                        "tertiary-container": "#00d7fe",
+                        "on-tertiary-container": "#005a6b",
+                        "tertiary-fixed-dim": "#17d8ff",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "background": "#131313",
+                        "on-background": "#e5e2e1"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "gutter-md": "24px",
+                        "unit": "8px",
+                        "margin-edge": "24px",
+                        "touch-target": "48px",
+                        "container-max": "1440px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "data-lg": ["JetBrains Mono", "monospace"],
+                        "label-caps": ["JetBrains Mono", "monospace"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "data-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .bg-grid-pattern {
+            background-size: 32px 32px;
+            background-image:
+                linear-gradient(to right, rgba(158, 143, 120, 0.12) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(158, 143, 120, 0.12) 1px, transparent 1px);
+        }
+
+        .industrial-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .industrial-card:active {
+            transform: scale(0.98);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+        }
+
+        .pulse-ring-anim {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+
+        @keyframes laser-scan {
+            0% {
+                top: 4%;
+                opacity: 0.8;
+            }
+
+            50% {
+                top: 92%;
+                opacity: 1;
+            }
+
+            100% {
+                top: 4%;
+                opacity: 0.8;
+            }
+        }
+
+        .laser-scan-anim {
+            animation: laser-scan 3.5s ease-in-out infinite;
+        }
+
+        .doc-sheet-mask {
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.52);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background text-on-background font-body-md antialiased min-h-screen min-h-[100dvh] flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+
+    <!-- Top App Bar -->
+    <header
+        class="w-full top-0 sticky z-40 bg-surface border-b-2 border-outline-variant flex items-center justify-between px-4 md:px-margin-edge h-touch-target">
+        <div class="flex items-center gap-3">
+            <button onclick="app.showTab('mode')"
+                class="text-primary hover:bg-surface-container-high p-2 rounded flex items-center justify-center active:scale-95 transition-transform"
+                title="Modos">
+                <span class="material-symbols-outlined text-[24px]">assignment</span>
+            </button>
+            <div class="flex flex-col">
+                <h1
+                    class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface flex items-center gap-2">
+                    Field Survey
+                    <span id="header-mode-badge"
+                        class="hidden font-label-caps text-[10px] uppercase px-2 py-0.5 rounded border border-primary text-primary bg-primary-container/20">4
+                        PÁGS</span>
+                </h1>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Webhook Connection Status Dot -->
+            <div id="backend-status-indicator"
+                class="flex items-center gap-1.5 px-2 py-1 bg-surface-container border border-outline-variant rounded"
+                title="Estado de Servidor / Webhook">
+                <div id="backend-status-dot" class="w-2.5 h-2.5 rounded-full bg-yellow-500 animate-pulse"></div>
+                <span id="backend-status-text"
+                    class="font-label-caps text-[10px] text-on-surface-variant uppercase">CONECTANDO</span>
+            </div>
+
+            <!-- Sync shortcut -->
+            <button onclick="app.showTab('sync')"
+                class="text-primary hover:bg-surface-container-high p-2 rounded flex items-center justify-center relative active:scale-95 transition-transform"
+                title="Bandeja de Sincronización">
+                <span class="material-symbols-outlined text-[24px]">cloud_sync</span>
+                <span id="top-badge-pending"
+                    class="hidden absolute top-1 right-1 w-4 h-4 bg-primary-container text-on-primary-container font-label-caps text-[9px] rounded-full flex items-center justify-center font-bold">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex flex-col max-w-container-max mx-auto w-full pb-24 md:pb-28">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: INICIO / SELECCIÓN DE APARTADO      -->
+        <!-- ========================================== -->
+        <section id="view-mode" class="p-4 md:p-gutter-md flex flex-col gap-6 flex-grow">
+            <!-- Context Selectors (Municipality Managed List + AI Auto Date) -->
+            <div
+                class="bg-surface-container p-4 md:p-gutter-md border-2 border-outline-variant rounded flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                <div class="flex-1 flex flex-col gap-1.5">
+                    <div class="flex items-center justify-between">
+                        <label
+                            class="font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-1.5"
+                            for="select-municipio">
+                            <span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+                            3. Municipio / Ubicación de Trabajo
+                        </label>
+                        <button onclick="app.showTab('settings')"
+                            class="text-primary hover:underline font-label-caps text-[11px] flex items-center gap-1 active:scale-95 transition-transform"
+                            title="Administrar lista de municipios">
+                            <span class="material-symbols-outlined text-[14px]">edit_location_alt</span>
+                            Gestionar Lista
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <select id="select-municipio"
+                            class="w-full bg-surface-dim border-2 border-outline-variant rounded text-on-surface h-touch-target px-4 focus:border-primary focus:ring-0 font-data-lg text-data-lg appearance-none cursor-pointer [color-scheme:dark]">
+                            <!-- Opciones inyectadas dinámicamente -->
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-primary">
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-surface-dim border border-outline-variant/60 p-3 rounded flex items-center gap-3 sm:max-w-xs shrink-0">
+                    <div
+                        class="w-10 h-10 rounded-full bg-primary/10 border border-primary text-primary flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-label-caps text-[10px] text-primary uppercase font-bold">1. Formato de Fecha</span>
+                        <span class="text-xs text-on-surface font-mono font-bold">YYYY-MM-DD</span>
+                        <span class="text-[10px] text-on-surface-variant">Extracción autónoma por IA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Modality Cards Section -->
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <h2 class="font-headline-lg-mobile text-lg text-on-surface font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-[22px]">ballot</span>
+                        Selecciona el Apartado de la Encuesta
+                    </h2>
+                    <span class="text-xs text-on-surface-variant font-mono">Elige el tipo de encuesta física a digitalizar</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+                    <!-- CARD 1: AMBULANTE / SEMIESTACIONARIO (4 FOTOS) -->
+                    <div class="bg-surface-container-high border-2 border-outline-variant hover:border-primary rounded-xl p-5 sm:p-6 flex flex-col justify-between gap-5 transition-all shadow-xl relative overflow-hidden group">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+                        
+                        <div class="flex flex-col gap-3">
+                            <div class="flex items-center justify-between">
+                                <span class="bg-primary/15 border border-primary/40 text-primary font-label-caps text-[10px] uppercase px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                    APARTADO 1 • 4 FOTOS OBLIGATORIAS
+                                </span>
+                                <span class="font-mono text-xs text-on-surface-variant bg-surface-dim px-2 py-0.5 rounded border border-outline-variant/60 font-bold">HOJAS 1 A 4</span>
+                            </div>
+
+                            <div class="flex items-start gap-3 mt-1">
+                                <div class="w-12 h-12 rounded-xl bg-primary-container/20 border border-primary text-primary flex items-center justify-center shrink-0 shadow">
+                                    <span class="material-symbols-outlined text-[28px]">directions_walk</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-headline-lg-mobile text-xl font-bold text-on-surface">Ambulante / Semiestacionario</h3>
+                                    <p class="text-xs text-primary font-medium mt-0.5">Ventas móviles, carretas y puestos semi-fijos</p>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-on-surface-variant leading-relaxed">
+                                Para encuestas físicas de <strong>4 páginas</strong> (sin Parte II). Ollama inspeccionará la casilla marcada en la Hoja 1 para transcribir con total exactitud si es <strong class="text-on-surface">"Ambulante"</strong> o <strong class="text-on-surface">"Semiestacionario"</strong>.
+                            </p>
+
+                            <!-- Pages Breakdown -->
+                            <div class="grid grid-cols-2 gap-2 mt-2 text-[11px] font-mono">
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5" title="Preguntas 1 a 15">
+                                    <span class="text-primary font-bold">P1:</span> <span class="text-on-surface truncate">Preguntas 1 a 15</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5" title="Preguntas 16 a 28.3">
+                                    <span class="text-primary font-bold">P2:</span> <span class="text-on-surface truncate">Preguntas 16 a 28,3</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5" title="Peligros Ocupacionales (Preguntas 28.4 a 35.2)">
+                                    <span class="text-primary font-bold">P3:</span> <span class="text-on-surface truncate">Peligros (28,4 a 35,2)</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5" title="Saneamiento Básico (Preguntas 35.3 a 36.10 y Agua 1 - 4.7)">
+                                    <span class="text-primary font-bold">P4:</span> <span class="text-on-surface truncate">Saneam. (35,3-36,10 / 1-4,7)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="app.startCaptureSession('Ambulante / Semiestacionario', 4)"
+                            class="w-full h-[50px] bg-primary-container hover:bg-primary text-on-primary-container font-data-lg text-sm font-bold rounded-lg border-2 border-on-primary-container shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer mt-1">
+                            <span class="material-symbols-outlined text-[22px] icon-fill">photo_camera</span>
+                            INICIAR ENCUESTA (4 FOTOS)
+                        </button>
+                    </div>
+
+                    <!-- CARD 2: ESTACIONARIO (5 FOTOS) -->
+                    <div class="bg-surface-container-high border-2 border-outline-variant hover:border-tertiary-container rounded-xl p-5 sm:p-6 flex flex-col justify-between gap-5 transition-all shadow-xl relative overflow-hidden group">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-tertiary-container/10 rounded-full blur-xl pointer-events-none group-hover:bg-tertiary-container/20 transition-all"></div>
+                        
+                        <div class="flex flex-col gap-3">
+                            <div class="flex items-center justify-between">
+                                <span class="bg-tertiary-container/15 border border-tertiary-container/40 text-tertiary-container font-label-caps text-[10px] uppercase px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                                    APARTADO 2 • 5 FOTOS OBLIGATORIAS
+                                </span>
+                                <span class="font-mono text-xs text-on-surface-variant bg-surface-dim px-2 py-0.5 rounded border border-outline-variant/60 font-bold">HOJAS 1 A 5</span>
+                            </div>
+
+                            <div class="flex items-start gap-3 mt-1">
+                                <div class="w-12 h-12 rounded-xl bg-tertiary-container/20 border border-tertiary-container text-tertiary-container flex items-center justify-center shrink-0 shadow">
+                                    <span class="material-symbols-outlined text-[28px]">store</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-headline-lg-mobile text-xl font-bold text-on-surface">Estacionario</h3>
+                                    <p class="text-xs text-tertiary-fixed-dim font-medium mt-0.5">Puestos fijos, locales y talleres comerciales</p>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-on-surface-variant leading-relaxed">
+                                Para encuestas físicas de <strong>5 páginas</strong>. Incluye la <strong class="text-on-surface">Hoja 5 (Parte II: Condiciones del Lugar de Trabajo)</strong> con sus 21 preguntas sobre agua, almacenamiento, químicos, residuos y control de plagas.
+                            </p>
+
+                            <!-- Pages Breakdown -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2 text-[11px] font-mono">
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5">
+                                    <span class="text-tertiary-fixed-dim font-bold">P1:</span> <span class="text-on-surface truncate">Preguntas 1-15</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5">
+                                    <span class="text-tertiary-fixed-dim font-bold">P2:</span> <span class="text-on-surface truncate">Preguntas 16-28,3</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5">
+                                    <span class="text-tertiary-fixed-dim font-bold">P3:</span> <span class="text-on-surface truncate">Peligros (28,4-35,2)</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-outline-variant/70 flex items-center gap-1.5">
+                                    <span class="text-tertiary-fixed-dim font-bold">P4:</span> <span class="text-on-surface truncate">Saneam. (35,3-4,7)</span>
+                                </div>
+                                <div class="bg-surface-dim p-2 rounded border border-tertiary-container/60 sm:col-span-2 flex items-center gap-1.5">
+                                    <span class="text-tertiary-container font-bold">P5:</span> <span class="text-on-surface font-semibold truncate">Parte II: Condiciones (1 a 21.8)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="app.startCaptureSession('Estacionario', 5)"
+                            class="w-full h-[50px] bg-tertiary-container hover:bg-tertiary text-on-tertiary-container font-data-lg text-sm font-bold rounded-lg border-2 border-on-tertiary-container shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer mt-1">
+                            <span class="material-symbols-outlined text-[22px] icon-fill">photo_camera</span>
+                            INICIAR ENCUESTA (5 FOTOS)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: CAPTURA DE FOTOS                    -->
+        <!-- ========================================== -->
+        <section id="view-capture" class="hidden flex-1 flex flex-col relative overflow-hidden">
+            <!-- Dynamic Header Bar -->
+            <div class="px-4 md:px-margin-edge py-3 bg-surface-container-low border-b-2 border-outline-variant z-10 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <button onclick="app.showTab('mode')" class="p-1 text-on-surface-variant hover:text-primary rounded active:scale-95 transition-transform" title="Volver a seleccionar apartado">
+                        <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+                    </button>
+                    <div class="flex flex-col">
+                        <span id="capture-mode-title" class="font-label-caps text-[11px] text-primary uppercase tracking-wider font-bold">
+                            AMBULANTE / SEMIESTACIONARIO (4 HOJAS)
+                        </span>
+                        <span id="capture-page-subtitle" class="text-[11px] text-on-surface-variant font-mono">
+                            Hoja 1: Encabezado y Datos Generales
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="capture-photos-count-badge" class="bg-primary/10 border border-primary/40 text-primary font-data-lg text-xs px-2.5 py-1 rounded font-bold">
+                        0 / 4 Hojas
+                    </span>
+                </div>
+            </div>
+
+            <!-- Central Preview / Active Sheet Area -->
+            <div class="flex-1 relative bg-surface-container-lowest m-2 sm:m-4 rounded-xl border-2 border-outline-variant overflow-hidden flex flex-col items-center justify-center min-h-[380px] max-h-[58vh] sm:max-h-[64vh] p-3 sm:p-4">
+
+                <!-- Native Camera & Gallery Hidden Inputs -->
+                <input id="native-camera-input" type="file" accept="image/*" capture="environment" class="hidden"
+                    onchange="app.handleNativeFileUpload(event)" />
+                <input id="native-gallery-input" type="file" accept="image/*" multiple class="hidden"
+                    onchange="app.handleNativeFileUpload(event)" />
+                <canvas id="capture-canvas" class="hidden"></canvas>
+
+                <!-- Sheet Card Container (Letter / A4 Vertical Ratio: 1 : 1.38) -->
+                <div id="capture-sheet-card"
+                    class="relative z-10 w-[84%] max-w-[320px] sm:max-w-[360px] aspect-[1/1.38] rounded-xl border-2 border-dashed border-primary/70 bg-surface-container-high/60 transition-all flex flex-col items-center justify-center p-3 group shadow-2xl overflow-hidden">
+
+                    <!-- Corner Brackets -->
+                    <div class="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-t-4 border-l-4 border-primary rounded-tl-lg pointer-events-none"></div>
+                    <div class="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-t-4 border-r-4 border-primary rounded-tr-lg pointer-events-none"></div>
+                    <div class="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-b-4 border-l-4 border-primary rounded-bl-lg pointer-events-none"></div>
+                    <div class="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-b-4 border-r-4 border-primary rounded-br-lg pointer-events-none"></div>
+
+                    <!-- State A: Empty slot / Add photo prompt -->
+                    <div id="sheet-empty-placeholder" onclick="app.triggerNativeCamera()"
+                        class="flex flex-col items-center justify-center text-center gap-3 p-4 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary-container/20 border-2 border-primary text-primary flex items-center justify-center group-hover:scale-110 active:scale-95 transition-transform shadow-lg">
+                            <span class="material-symbols-outlined text-[38px] sm:text-[46px]">photo_camera</span>
+                        </div>
+                        <div>
+                            <span id="sheet-empty-title" class="font-headline-lg-mobile text-base sm:text-lg font-bold text-on-surface block">
+                                Tomar Foto de Hoja 1
+                            </span>
+                            <span class="font-label-caps text-[11px] text-primary uppercase tracking-wider block mt-1 font-bold">
+                                TOCAR PARA ABRIR CÁMARA
+                            </span>
+                        </div>
+                        <p id="sheet-empty-desc" class="text-[11px] text-on-surface-variant max-w-[220px]">
+                            Auto-enfoque y auto-rotación vertical para máxima legibilidad de marcas y números.
+                        </p>
+                    </div>
+
+                    <!-- State B: Captured photo preview -->
+                    <div id="sheet-captured-preview"
+                        class="hidden absolute inset-0 w-full h-full bg-black/95 flex flex-col items-center justify-center">
+                        <img id="capture-preview-img" class="w-full h-full object-contain" alt="Página Capturada" />
+
+                        <!-- Top status tag -->
+                        <div class="absolute top-2 left-2 right-2 flex justify-between items-center z-20">
+                            <span id="sheet-captured-tag"
+                                class="bg-surface/90 border border-primary text-primary font-data-lg text-xs px-2.5 py-0.5 rounded shadow font-bold">HOJA 1</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="app.rotateActivePhoto()" class="bg-surface/90 hover:bg-primary/30 border border-outline text-primary px-2 py-0.5 rounded font-label-caps text-[10px] font-bold flex items-center gap-1 shadow" title="Girar 90°">
+                                    <span class="material-symbols-outlined text-[14px]">rotate_right</span> 90°
+                                </button>
+                                <button onclick="app.deleteActivePhoto()" class="bg-error/20 hover:bg-error/40 border border-error/50 text-error px-2 py-0.5 rounded font-label-caps text-[10px] font-bold flex items-center gap-1 shadow" title="Eliminar foto">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Bottom quick action overlay -->
+                        <div class="absolute bottom-3 flex items-center gap-2 z-20">
+                            <button onclick="app.triggerNativeCamera()"
+                                class="bg-surface/90 hover:bg-surface border border-outline-variant text-on-surface font-label-caps text-[10px] uppercase px-3 py-1 rounded backdrop-blur-sm flex items-center gap-1 shadow">
+                                <span class="material-symbols-outlined text-[14px] text-primary">replay</span> Repetir
+                            </button>
+                            <button onclick="app.rotateActivePhoto()"
+                                class="bg-surface/90 hover:bg-surface border border-outline-variant text-on-surface font-label-caps text-[10px] uppercase px-3 py-1 rounded backdrop-blur-sm flex items-center gap-1 shadow">
+                                <span class="material-symbols-outlined text-[14px] text-primary">screen_rotation</span> Girar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Primary Trigger Controls -->
+            <div class="px-4 md:px-margin-edge py-3.5 flex flex-col items-center gap-3 shrink-0 z-20 bg-surface border-t border-outline-variant">
+                <div class="flex items-center justify-around w-full max-w-md">
+                    <!-- Rotate Active Button -->
+                    <button onclick="app.rotateActivePhoto()"
+                        class="flex flex-col items-center gap-1 group active:scale-95 transition-transform cursor-pointer"
+                        title="Girar foto activa 90°">
+                        <div class="w-12 h-12 rounded-full border-2 border-outline-variant bg-surface-container-highest text-on-surface flex items-center justify-center group-hover:border-primary transition-colors shadow">
+                            <span class="material-symbols-outlined text-[22px]">rotate_right</span>
+                        </div>
+                        <span class="font-label-caps text-[10px] text-on-surface-variant uppercase group-hover:text-primary transition-colors font-bold">Girar</span>
+                    </button>
+
+                    <!-- Primary Shutter Button (Direct Native Camera Trigger) -->
+                    <button id="btn-shutter" onclick="app.triggerNativeCamera()"
+                        class="relative flex items-center justify-center active:scale-90 transition-transform group cursor-pointer"
+                        title="Tomar Foto / Abrir Cámara">
+                        <div class="absolute inset-0 bg-primary-container/20 rounded-full scale-125 pulse-ring-anim"></div>
+                        <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-primary-container text-on-primary-container border-4 border-primary-fixed shadow-[0_4px_20px_rgba(255,184,0,0.4)] flex items-center justify-center z-10 group-hover:bg-primary transition-colors">
+                            <span class="material-symbols-outlined text-[36px] sm:text-[42px] icon-fill">photo_camera</span>
+                        </div>
+                    </button>
+
+                    <!-- Gallery Picker (Multiple selection enabled) -->
+                    <div class="flex flex-col items-center gap-1">
+                        <button onclick="document.getElementById('native-gallery-input').click()"
+                            class="flex flex-col items-center gap-1 group active:scale-95 transition-transform cursor-pointer"
+                            title="Elegir fotos de Galería">
+                            <div class="w-12 h-12 rounded-full border-2 border-outline-variant bg-surface-container text-on-surface-variant flex items-center justify-center group-hover:border-primary transition-colors shadow">
+                                <span class="material-symbols-outlined text-[22px]">photo_library</span>
+                            </div>
+                            <span class="font-label-caps text-[10px] text-on-surface-variant uppercase group-hover:text-primary transition-colors font-bold">Galería</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Horizontal Thumbnail Strip with Guided Slots -->
+            <div class="w-full bg-surface-container border-t-2 border-outline-variant py-3 shrink-0 z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.5)]">
+                <div class="px-4 md:px-margin-edge mb-2 flex justify-between items-center">
+                    <span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-bold flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px] text-primary">view_carousel</span>
+                        Hojas Requeridas de la Encuesta
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="app.clearAllPhotos()" class="text-error hover:underline font-label-caps text-[11px] uppercase font-bold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">delete_sweep</span> Limpiar
+                        </button>
+                        <span id="strip-counter-label" class="font-label-caps text-label-caps text-primary-fixed-dim font-bold">
+                            0 / 4 Hojas
+                        </span>
+                    </div>
+                </div>
+                <!-- Dynamic List of Thumbnails -->
+                <div id="thumbnail-strip-list" class="flex gap-2.5 px-4 md:px-margin-edge overflow-x-auto pb-1 snap-x hide-scrollbar">
+                    <!-- Inyectado dinámicamente según modalidad 4 o 5 -->
+                </div>
+            </div>
+
+            <!-- Save & Direct Send Action Bar -->
+            <div class="p-4 bg-surface-container-high border-t-2 border-outline-variant z-30 flex flex-col sm:flex-row gap-3">
+                <button id="btn-send-direct" onclick="app.sendCurrentSurveyDirectly()" disabled
+                    class="flex-1 h-touch-target bg-surface-container-highest text-on-surface-variant border-2 border-outline-variant rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-not-allowed opacity-60 transition-all font-bold">
+                    <span class="material-symbols-outlined text-[20px] icon-fill">cloud_upload</span>
+                    ⚡ Enviar a Google Sheets
+                </button>
+                <button id="btn-save-survey" onclick="app.saveCurrentSurveyToStorage()" disabled
+                    class="flex-1 h-touch-target bg-surface-container-highest text-on-surface-variant border-2 border-outline-variant rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-not-allowed opacity-60 transition-all font-bold">
+                    <span class="material-symbols-outlined text-[20px]">save</span>
+                    💾 Guardar en Cola Local
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: BANDEJA DE SINCRONIZACIÓN          -->
+        <!-- ========================================== -->
+        <section id="view-sync" class="hidden p-4 md:p-gutter-md flex flex-col gap-6 flex-grow">
+            <!-- Summary Badge -->
+            <div
+                class="bg-surface-container-high border-2 border-outline-variant p-4 md:p-gutter-md flex items-center justify-between gap-4 rounded">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center flex-shrink-0 text-on-primary-container">
+                        <span class="material-symbols-outlined text-[28px] icon-fill">sync</span>
+                    </div>
+                    <div>
+                        <h2 id="sync-summary-count"
+                            class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">0</h2>
+                        <p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Encuestas listas
+                            para sincronizar</p>
+                    </div>
+                </div>
+
+                <button onclick="app.loadSurveysList()"
+                    class="p-2 border border-outline-variant rounded hover:bg-surface-container text-on-surface-variant"
+                    title="Recargar lista">
+                    <span class="material-symbols-outlined text-[20px]">refresh</span>
+                </button>
+            </div>
+
+            <!-- Survey List Container -->
+            <div id="survey-list-container" class="grid grid-cols-1 gap-4">
+                <!-- Inyectado dinámicamente -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="survey-empty-state"
+                class="hidden bg-surface-container border-2 border-dashed border-outline-variant p-10 flex flex-col items-center justify-center text-center gap-4 rounded">
+                <span class="material-symbols-outlined text-outline text-[54px]">inventory_2</span>
+                <div>
+                    <h3 class="font-headline-lg-mobile text-on-surface font-bold mb-1">No hay encuestas en cola</h3>
+                    <p class="text-sm text-on-surface-variant">Seleccione una modalidad y capture las fotos para
+                        almacenar encuestas localmente.</p>
+                </div>
+                <button onclick="app.showTab('mode')"
+                    class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded font-label-caps font-bold text-xs uppercase flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+                    Nueva Encuesta
+                </button>
+            </div>
+
+            <!-- Fixed / Bottom Action Area for Sync -->
+            <div
+                class="sticky bottom-20 bg-surface border-2 border-outline-variant p-4 rounded shadow-2xl z-30 flex flex-col gap-3">
+                <!-- Default State: Sync Batch Button -->
+                <button id="btn-sync-batch" onclick="app.executeBatchSync()"
+                    class="w-full h-[58px] bg-primary-container text-on-primary-container font-data-lg text-data-lg flex items-center justify-center gap-2 border-2 border-on-primary-container active:bg-surface-tint transition-colors font-bold rounded">
+                    <span class="material-symbols-outlined icon-fill">cloud_upload</span>
+                    Sincronizar Lote
+                </button>
+
+                <!-- Progress State (Hidden initially) -->
+                <div id="sync-progress-box" class="hidden w-full flex-col justify-center gap-2">
+                    <div class="flex justify-between items-center px-1">
+                        <span id="sync-progress-label"
+                            class="font-label-caps text-label-caps text-on-surface uppercase">Procesando con Gemini
+                            Vision y enviando a Google Sheets...</span>
+                        <span
+                            class="material-symbols-outlined text-primary-container animate-spin text-[20px]">sync</span>
+                    </div>
+                    <div
+                        class="w-full h-3.5 bg-surface-container-high border-2 border-outline-variant overflow-hidden rounded">
+                        <div id="sync-progress-bar" class="h-full bg-primary-container transition-all duration-300 w-0">
+                        </div>
+                    </div>
+                    <div id="sync-console-log"
+                        class="font-data-lg text-xs text-primary-fixed-dim bg-surface-dim p-2 border border-outline-variant rounded max-h-20 overflow-y-auto font-mono">
+                        Iniciando sincronización...
+                    </div>
+                </div>
+
+                <!-- Success State (Hidden initially) -->
+                <div id="sync-success-box"
+                    class="hidden w-full h-[58px] bg-tertiary-container border-2 border-on-tertiary-container flex items-center justify-center gap-2 text-on-tertiary-container font-data-lg text-data-lg font-bold rounded">
+                    <span class="material-symbols-outlined icon-fill">cloud_done</span>
+                    Sincronización Completa
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: AJUSTES & DIAGNÓSTICO              -->
+        <!-- ========================================== -->
+        <section id="view-settings" class="hidden p-4 md:p-gutter-md flex flex-col gap-6 flex-grow">
+            <div class="border-b border-outline-variant pb-2">
+                <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed-dim font-bold">Diagnóstico
+                    y Configuración</h2>
+                <p class="text-on-surface-variant text-sm mt-0.5">Verificación de servicios externos, conectividad con
+                    Webhook de Google Sheets e IA Gemini.</p>
+            </div>
+
+            <!-- Diagnostics Card -->
+            <div class="bg-surface-container border-2 border-outline-variant p-5 rounded flex flex-col gap-4">
+                <h3
+                    class="font-headline-lg-mobile text-sm uppercase text-on-surface font-bold border-b border-outline-variant pb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">network_ping</span>
+                    Estado de Integración
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-surface-dim p-4 border border-outline-variant rounded flex flex-col gap-1">
+                        <span class="font-label-caps text-[11px] text-on-surface-variant">GOOGLE APPS SCRIPT
+                            WEBHOOK</span>
+                        <span
+                            class="font-data-lg text-xs text-on-surface break-all">AKfycbybnO0mfJECnS3CQkHzVd4WRAvQFxfNc5JxkJkXEeFvQTBctUluD5CnpZk0gT18rG3K</span>
+                        <div class="mt-2 flex items-center gap-2">
+                            <button onclick="app.runWebhookDirectTest()"
+                                class="bg-primary/20 hover:bg-primary/30 border border-primary text-primary px-3 py-1 rounded text-xs font-label-caps font-bold">
+                                Probar Ping Webhook (64 cols)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-surface-dim p-4 border border-outline-variant rounded flex flex-col gap-1">
+                        <div class="flex justify-between items-center">
+                            <span class="font-label-caps text-[11px] text-on-surface-variant uppercase">MOTOR IA
+                                MULTIMODAL</span>
+                            <span id="ai-engine-badge"
+                                class="font-label-caps text-[9px] px-1.5 py-0.5 rounded bg-primary/20 text-primary border border-primary/30 font-bold uppercase">GPU
+                                RTX 4060</span>
+                        </div>
+                        <span id="ai-engine-name" class="font-data-lg text-xs text-primary font-bold">Ollama (MiniCPM-V
+                            2.6 Local)</span>
+                        <span id="ai-engine-fallback" class="font-data-lg text-[10px] text-on-surface-variant">Fallback:
+                            Gemini 3.5 Flash Lite | Res: Max 1400px</span>
+                        <div class="mt-2 flex items-center gap-2">
+                            <button onclick="app.checkBackendHealth(true)"
+                                class="bg-primary/20 hover:bg-primary/30 border border-primary text-primary px-3 py-1 rounded text-xs font-label-caps font-bold">
+                                Verificar Estado y GPU
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Result Log -->
+                <div id="diagnostic-output"
+                    class="hidden bg-surface-lowest p-3 border border-outline-variant rounded font-mono text-xs text-primary max-h-48 overflow-y-auto">
+                </div>
+            </div>
+
+            <!-- Municipality Manager Card -->
+            <div class="bg-surface-container border-2 border-outline-variant p-5 rounded flex flex-col gap-4 shadow-lg">
+                <div class="flex justify-between items-center border-b border-outline-variant pb-2">
+                    <h3
+                        class="font-headline-lg-mobile text-sm uppercase text-on-surface font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">location_city</span>
+                        Gestor de Municipios y Sectores
+                    </h3>
+                    <span
+                        class="font-label-caps text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/30 font-bold uppercase">SELECCIONABLES
+                        EN CAMPO</span>
+                </div>
+                <p class="text-xs text-on-surface-variant">Agrega o elimina los municipios que aparecerán en la lista
+                    desplegable al momento de capturar encuestas.</p>
+
+                <!-- Add New Municipality Input -->
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input id="input-new-municipio" type="text"
+                        placeholder="Escribe nuevo municipio (ej. Bosa - Parque Central)..."
+                        class="flex-1 bg-surface-dim border-2 border-outline-variant rounded text-on-surface h-touch-target px-4 focus:border-primary focus:ring-0 font-data-lg text-sm"
+                        onkeydown="if(event.key==='Enter') app.addMunicipio()" />
+                    <button onclick="app.addMunicipio()"
+                        class="bg-primary-container text-on-primary-container px-5 h-touch-target rounded font-label-caps text-xs font-bold uppercase flex items-center justify-center gap-2 hover:bg-primary active:scale-95 transition-all shadow shrink-0 cursor-pointer">
+                        <span class="material-symbols-outlined text-[18px]">add_location</span>
+                        Agregar Municipio
+                    </button>
+                </div>
+
+                <!-- List of Configured Municipalities -->
+                <div class="flex flex-col gap-2 mt-1">
+                    <span class="font-label-caps text-[11px] text-on-surface-variant uppercase font-bold">Municipios
+                        Registrados Actualmente:</span>
+                    <div id="municipios-settings-list" class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
+                        <!-- Inyectado dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storage Management -->
+            <div class="bg-surface-container border-2 border-outline-variant p-5 rounded flex flex-col gap-4">
+                <h3
+                    class="font-headline-lg-mobile text-sm uppercase text-on-surface font-bold border-b border-outline-variant pb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary">database</span>
+                    Gestión de Almacenamiento Local (IndexedDB)
+                </h3>
+
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="app.clearCompletedSurveys()"
+                        class="bg-surface-dim hover:bg-surface-container-high border border-outline-variant text-on-surface px-4 py-2 rounded text-xs font-label-caps font-bold flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+                        Limpiar Encuestas ya Enviadas
+                    </button>
+                    <button onclick="app.exportSurveysJSON()"
+                        class="bg-surface-dim hover:bg-surface-container-high border border-outline-variant text-on-surface px-4 py-2 rounded text-xs font-label-caps font-bold flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">download</span>
+                        Exportar Backup JSON
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL: DETALLES DE ENCUESTA Y DATOS 64     -->
+    <!-- ========================================== -->
+    <div id="survey-detail-modal"
+        class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div
+            class="bg-surface-container border-2 border-outline-variant w-full max-w-3xl max-h-[90vh] rounded-lg flex flex-col overflow-hidden shadow-2xl">
+            <!-- Modal Header -->
+            <div class="p-4 border-b-2 border-outline-variant flex justify-between items-center bg-surface">
+                <div>
+                    <h3 id="modal-survey-id" class="font-headline-lg-mobile text-lg text-primary font-bold">DETALLE DE
+                        ENCUESTA</h3>
+                    <p id="modal-survey-subtitle" class="text-xs text-on-surface-variant font-mono"></p>
+                </div>
+                <button onclick="app.closeModal()" class="text-on-surface-variant hover:text-on-surface p-1">
+                    <span class="material-symbols-outlined text-[28px]">close</span>
+                </button>
+            </div>
+
+            <!-- Modal Content (Tabs: Fotos / 64 Columnas) -->
+            <div class="flex-grow overflow-y-auto p-4 flex flex-col gap-4">
+                <!-- Photos row -->
+                <div>
+                    <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Fotos
+                        Adjuntas:</span>
+                    <div id="modal-photos-grid" class="flex gap-2 overflow-x-auto py-2"></div>
+                </div>
+
+                <!-- 64 Columns Table -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Datos
+                            Extraídos (64 Columnas Google Sheets):</span>
+                        <button onclick="app.copyExtractedDataJSON()"
+                            class="text-primary text-xs font-label-caps hover:underline flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">content_copy</span> Copiar JSON
+                        </button>
+                    </div>
+                    <div class="border border-outline-variant rounded overflow-hidden max-h-72 overflow-y-auto">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-surface-container-high text-primary-fixed-dim uppercase sticky top-0">
+                                <tr>
+                                    <th class="p-2 border-b border-outline-variant w-1/2">Columna / Campo</th>
+                                    <th class="p-2 border-b border-outline-variant w-1/2">Valor Extraído</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-columns-table-body" class="divide-y divide-outline-variant bg-surface-dim">
+                                <!-- Filas inyectadas dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 border-t-2 border-outline-variant bg-surface flex justify-end gap-3">
+                <button onclick="app.closeModal()"
+                    class="px-4 py-2 border border-outline-variant text-on-surface text-xs font-label-caps rounded">Cerrar</button>
+                <button id="modal-resync-btn" onclick="app.syncSingleSurveyFromModal()"
+                    class="px-4 py-2 bg-primary-container text-on-primary-container text-xs font-label-caps font-bold rounded flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">sync</span>
+                    Sincronizar Esta Encuesta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: PROCESANDO ENVÍO DIRECTO            -->
+    <!-- ========================================== -->
+    <div id="direct-sending-modal"
+        class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div
+            class="bg-surface-container border-2 border-primary w-full max-w-md rounded-xl p-6 flex flex-col items-center text-center gap-4 shadow-2xl">
+            <div class="relative flex items-center justify-center">
+                <div class="w-20 h-20 rounded-full border-4 border-outline-variant border-t-primary animate-spin"></div>
+                <span class="material-symbols-outlined text-primary text-[36px] absolute">cloud_upload</span>
+            </div>
+            <div>
+                <h3 class="font-headline-lg-mobile text-lg text-primary font-bold">Digitalizando con Gemma 4 26B</h3>
+                <p id="direct-sending-status-text" class="text-xs text-on-surface-variant mt-1 font-mono">Extrayendo 64
+                    campos y enviando a Google Sheets...</p>
+            </div>
+            <div
+                class="w-full bg-surface-container-highest h-2.5 rounded-full overflow-hidden border border-outline-variant">
+                <div class="bg-primary h-full w-full animate-pulse"></div>
+            </div>
+            <p class="text-[11px] text-on-surface-variant opacity-70">Enviando imágenes comprimidas al servidor...</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: ÉXITO DE ENVÍO DIRECTO              -->
+    <!-- ========================================== -->
+    <div id="direct-success-modal"
+        class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div
+            class="bg-surface-container border-2 border-tertiary-container w-full max-w-md rounded-xl p-6 flex flex-col items-center text-center gap-4 shadow-2xl">
+            <div
+                class="w-16 h-16 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-lg">
+                <span class="material-symbols-outlined text-[36px] icon-fill">check_circle</span>
+            </div>
+            <div>
+                <span
+                    class="font-label-caps text-xs text-tertiary-container uppercase tracking-wider font-bold">REGISTRADO
+                    EN GOOGLE SHEETS</span>
+                <h3 id="success-modal-worker" class="font-headline-lg-mobile text-xl text-on-surface font-bold mt-1">
+                    CARLOS GÓMEZ</h3>
+                <p id="success-modal-id" class="text-xs text-primary font-mono mt-0.5">C.C. 1098765432 • ID: SURV-001
+                </p>
+                <p id="success-modal-modality" class="text-xs text-on-surface-variant font-mono mt-0.5">Ambulante (4
+                    Págs) • Sector Norte</p>
+            </div>
+
+            <div
+                class="w-full bg-surface-dim p-3 rounded border border-outline-variant text-left text-xs font-mono flex flex-col gap-1.5">
+                <div class="flex justify-between text-on-surface">
+                    <span>Estado Google Sheets:</span>
+                    <span class="text-green-400 font-bold">Fila Agregada (HTTP 200)</span>
+                </div>
+                <div class="flex justify-between text-on-surface-variant">
+                    <span>Columnas procesadas:</span>
+                    <span class="text-primary font-bold">64 de 64 columnas</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col w-full gap-2 mt-2">
+                <button onclick="app.startNextSurveyAfterSuccess()"
+                    class="w-full py-3 bg-primary-container text-on-primary-container font-label-caps text-sm uppercase rounded font-bold hover:bg-primary transition-colors flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+                    <span class="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+                    ➕ Capturar Siguiente Encuesta
+                </button>
+                <button onclick="app.viewInTrayAfterSuccess()"
+                    class="w-full py-2.5 bg-surface-container-high text-on-surface border border-outline font-label-caps text-xs uppercase rounded font-bold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">inventory_2</span>
+                    Ver en Bandeja de Encuestas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PERSISTENT BOTTOM NAVIGATION BAR           -->
+    <!-- ========================================== -->
+    <nav
+        class="fixed bottom-0 left-0 w-full z-40 flex justify-around items-center px-2 md:px-4 pb-safe bg-surface-container border-t-2 border-outline-variant h-20">
+        <!-- Tab 1: Inicio -->
+        <button id="nav-btn-mode" onclick="app.showTab('mode')"
+            class="flex flex-col items-center justify-center text-primary h-full w-full max-w-[80px] transition-colors">
+            <span class="material-symbols-outlined text-[24px]">dashboard</span>
+            <span class="font-label-caps text-[10px] mt-1 uppercase">Inicio</span>
+        </button>
+
+        <!-- Tab 2: Captura -->
+        <button id="nav-btn-capture" onclick="app.showTab('capture')"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary h-full w-full max-w-[80px] transition-colors">
+            <span class="material-symbols-outlined text-[24px]">photo_camera</span>
+            <span class="font-label-caps text-[10px] mt-1 uppercase">Captura</span>
+        </button>
+
+        <!-- Tab 3: Sincronización -->
+        <button id="nav-btn-sync" onclick="app.showTab('sync')"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary h-full w-full max-w-[80px] transition-colors relative">
+            <span class="material-symbols-outlined text-[24px]">sync</span>
+            <span class="font-label-caps text-[10px] mt-1 uppercase">Sync</span>
+            <span id="nav-badge-pending"
+                class="hidden absolute top-2 right-4 w-4 h-4 bg-secondary-container text-on-secondary-container font-label-caps text-[9px] rounded-full flex items-center justify-center font-bold">0</span>
+        </button>
+
+        <!-- Tab 4: Ajustes -->
+        <button id="nav-btn-settings" onclick="app.showTab('settings')"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary h-full w-full max-w-[80px] transition-colors">
+            <span class="material-symbols-outlined text-[24px]">settings</span>
+            <span class="font-label-caps text-[10px] mt-1 uppercase">Ajustes</span>
+        </button>
+    </nav>
+
+    <!-- Embedded Resilient IndexedDB Storage Engine -->
+    <script>
+        const DB_NAME = "HealthSurveyDB";
+        const DB_VERSION = 1;
+        const STORE_SURVEYS = "surveys";
+
+        class SurveyStorage {
+            constructor() {
+                this.db = null;
+                this.memoryFallback = new Map();
+                this.useFallback = false;
+            }
+
+            async init() {
+                if (this.db) return this.db;
+                if (this.useFallback) return null;
+
+                if (!window.indexedDB) {
+                    this.useFallback = true;
+                    this.loadFromLocalStorage();
+                    return null;
+                }
+
+                return new Promise((resolve) => {
+                    try {
+                        const request = indexedDB.open(DB_NAME, DB_VERSION);
+                        request.onupgradeneeded = (event) => {
+                            const db = event.target.result;
+                            if (!db.objectStoreNames.contains(STORE_SURVEYS)) {
+                                const store = db.createObjectStore(STORE_SURVEYS, { keyPath: "id" });
+                                store.createIndex("estado", "estado", { unique: false });
+                                store.createIndex("created_at", "created_at", { unique: false });
+                                store.createIndex("modalidad", "modalidad", { unique: false });
+                            }
+                        };
+                        request.onsuccess = (event) => {
+                            this.db = event.target.result;
+                            resolve(this.db);
+                        };
+                        request.onerror = (event) => {
+                            this.useFallback = true;
+                            this.loadFromLocalStorage();
+                            resolve(null);
+                        };
+                        request.onblocked = () => {
+                            this.useFallback = true;
+                            this.loadFromLocalStorage();
+                            resolve(null);
+                        };
+                    } catch (e) {
+                        this.useFallback = true;
+                        this.loadFromLocalStorage();
+                        resolve(null);
+                    }
+                });
+            }
+
+            loadFromLocalStorage() {
+                try {
+                    const raw = localStorage.getItem("health_surveys_fallback");
+                    if (raw) {
+                        const items = JSON.parse(raw);
+                        items.forEach(item => this.memoryFallback.set(item.id, item));
+                    }
+                } catch (e) { }
+            }
+
+            saveToLocalStorage() {
+                try {
+                    const items = Array.from(this.memoryFallback.values());
+                    const lightItems = items.map(s => ({
+                        ...s,
+                        fotos: s.fotos ? s.fotos.map((f, i) => f ? f.substring(0, 80) + "...[saved]" : null) : []
+                    }));
+                    localStorage.setItem("health_surveys_fallback", JSON.stringify(lightItems));
+                } catch (e) { }
+            }
+
+            async saveSurvey(survey) {
+                await this.init();
+
+                if (!survey.id) {
+                    const timestamp = Date.now();
+                    const rand = Math.floor(Math.random() * 900) + 100;
+                    survey.id = `SURV-${timestamp}-${rand}`;
+                }
+                if (!survey.created_at) {
+                    survey.created_at = new Date().toISOString();
+                }
+                if (!survey.estado) {
+                    survey.estado = "PENDIENTE";
+                }
+
+                this.memoryFallback.set(survey.id, survey);
+
+                if (this.useFallback || !this.db) {
+                    this.saveToLocalStorage();
+                    return survey;
+                }
+
+                return new Promise((resolve) => {
+                    try {
+                        const tx = this.db.transaction([STORE_SURVEYS], "readwrite");
+                        const store = tx.objectStore(STORE_SURVEYS);
+
+                        tx.onerror = () => {
+                            this.saveToLocalStorage();
+                            resolve(survey);
+                        };
+
+                        const req = store.put(survey);
+                        req.onsuccess = () => resolve(survey);
+                        req.onerror = () => {
+                            this.saveToLocalStorage();
+                            resolve(survey);
+                        };
+                    } catch (err) {
+                        this.saveToLocalStorage();
+                        resolve(survey);
+                    }
+                });
+            }
+
+            async getSurvey(id) {
+                await this.init();
+                if (this.useFallback || !this.db) {
+                    return this.memoryFallback.get(id) || null;
+                }
+                return new Promise((resolve) => {
+                    try {
+                        const tx = this.db.transaction([STORE_SURVEYS], "readonly");
+                        const store = tx.objectStore(STORE_SURVEYS);
+                        const req = store.get(id);
+                        req.onsuccess = () => resolve(req.result || this.memoryFallback.get(id) || null);
+                        req.onerror = () => resolve(this.memoryFallback.get(id) || null);
+                    } catch (e) {
+                        resolve(this.memoryFallback.get(id) || null);
+                    }
+                });
+            }
+
+            async getAllSurveys() {
+                await this.init();
+                if (this.useFallback || !this.db) {
+                    const items = Array.from(this.memoryFallback.values());
+                    items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    return items;
+                }
+                return new Promise((resolve) => {
+                    try {
+                        const tx = this.db.transaction([STORE_SURVEYS], "readonly");
+                        const store = tx.objectStore(STORE_SURVEYS);
+                        const req = store.getAll();
+                        req.onsuccess = () => {
+                            const items = req.result || [];
+                            this.memoryFallback.forEach((val, key) => {
+                                if (!items.find(i => i.id === key)) {
+                                    items.push(val);
+                                }
+                            });
+                            items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                            resolve(items);
+                        };
+                        req.onerror = () => {
+                            const items = Array.from(this.memoryFallback.values());
+                            items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                            resolve(items);
+                        };
+                    } catch (e) {
+                        const items = Array.from(this.memoryFallback.values());
+                        items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                        resolve(items);
+                    }
+                });
+            }
+
+            async getPendingSurveys() {
+                const all = await this.getAllSurveys();
+                return all.filter(s => s.estado === "PENDIENTE" || s.estado === "ERROR");
+            }
+
+            async updateSurveyStatus(id, estado, resultadoExtraido = null, errorMensaje = null) {
+                await this.init();
+                let survey = await this.getSurvey(id);
+                if (!survey) {
+                    survey = { id: id, created_at: new Date().toISOString() };
+                }
+
+                survey.estado = estado;
+                if (resultadoExtraido) {
+                    survey.resultado_extraccion = resultadoExtraido;
+                }
+                if (errorMensaje !== undefined) {
+                    survey.error_mensaje = errorMensaje;
+                }
+                survey.updated_at = new Date().toISOString();
+
+                return this.saveSurvey(survey);
+            }
+
+            async deleteSurvey(id) {
+                await this.init();
+                this.memoryFallback.delete(id);
+                this.saveToLocalStorage();
+
+                if (this.useFallback || !this.db) {
+                    return true;
+                }
+
+                return new Promise((resolve) => {
+                    try {
+                        const tx = this.db.transaction([STORE_SURVEYS], "readwrite");
+                        const store = tx.objectStore(STORE_SURVEYS);
+                        const req = store.delete(id);
+                        req.onsuccess = () => resolve(true);
+                        req.onerror = () => resolve(true);
+                    } catch (e) {
+                        resolve(true);
+                    }
+                });
+            }
+
+            async clearCompletedSurveys() {
+                const all = await this.getAllSurveys();
+                for (const s of all) {
+                    if (s.estado === "ENVIADO") {
+                        await this.deleteSurvey(s.id);
+                    }
+                }
+                return true;
+            }
+
+            async countSummary() {
+                const all = await this.getAllSurveys();
+                return {
+                    total: all.length,
+                    pendientes: all.filter(s => s.estado === "PENDIENTE" || s.estado === "ERROR").length,
+                    enviados: all.filter(s => s.estado === "ENVIADO").length,
+                    procesando: all.filter(s => s.estado === "PROCESANDO").length
+                };
+            }
+        }
+
+        window.surveyStorage = new SurveyStorage();
+    </script>
+
+    <!-- Application Logic Script -->
+    <script>
+        class HealthSurveyApp {
+            constructor() {
+                this.currentTab = 'mode';
+                this.currentModality = 'Ambulante / Semiestacionario'; // 'Ambulante / Semiestacionario' o 'Estacionario'
+                this.totalPagesRequired = 4;                           // 4 o 5
+                this.activePageIndex = 0;                              // 0-indexed (0 a 3 o 0 a 4)
+                this.capturedPhotos = [null, null, null, null];        // Array con longitud exacta
+                this.activeModalSurvey = null;
+                this.isSyncing = false;
+                this.municipios = [];
+
+                this.sheetDefinitions = {
+                    4: [
+                        { title: "Hoja 1: Preguntas 1 a 15", subtitle: "Identificación, Datos Sociodemográficos y Seguridad Social (1-15)", short: "Hoja 1 (1-15)" },
+                        { title: "Hoja 2: Preguntas 16 a 28,3", subtitle: "Antigüedad, Jornada, Hábitos de Vida, Salud y Síntomas Iniciales (16-28.3)", short: "Hoja 2 (16-28.3)" },
+                        { title: "Hoja 3: Peligros Ocupacionales (Preguntas 28,4 a 35,2)", subtitle: "Síntomas Restantes, Accidentes, Discapacidad y Peligros (28.4-35.2)", short: "Hoja 3 (28.4-35.2)" },
+                        { title: "Hoja 4: Saneamiento Básico (Preguntas 35,3 a 36,10 y Agua 1 - 4,7)", subtitle: "Biológicos, Psicosociales, Agua, Excretas, Residuos y Combustibles (35.3-4.7)", short: "Hoja 4 (35.3-4.7)" }
+                    ],
+                    5: [
+                        { title: "Hoja 1: Preguntas 1 a 15", subtitle: "Identificación, Datos Sociodemográficos y Seguridad Social (1-15)", short: "Hoja 1 (1-15)" },
+                        { title: "Hoja 2: Preguntas 16 a 28,3", subtitle: "Antigüedad, Jornada, Hábitos de Vida, Salud y Síntomas Iniciales (16-28.3)", short: "Hoja 2 (16-28.3)" },
+                        { title: "Hoja 3: Peligros Ocupacionales (Preguntas 28,4 a 35,2)", subtitle: "Síntomas Restantes, Accidentes, Discapacidad y Peligros (28.4-35.2)", short: "Hoja 3 (28.4-35.2)" },
+                        { title: "Hoja 4: Saneamiento Básico (Preguntas 35,3 a 36,10 y Agua 1 - 4,7)", subtitle: "Biológicos, Psicosociales, Agua, Excretas, Residuos y Combustibles (35.3-4.7)", short: "Hoja 4 (35.3-4.7)" },
+                        { title: "Hoja 5: Parte II - Condiciones del Trabajo (Preguntas 1 a 21.8)", subtitle: "Entorno laboral, Almacenamiento, Químicos, Vectores y Plagas (1-21.8)", short: "Hoja 5 (1-21.8)" }
+                    ]
+                };
+            }
+
+            async init() {
+                // Init storage
+                if (window.surveyStorage) {
+                    await window.surveyStorage.init();
+                }
+
+                // Cargar lista de municipios configurables
+                this.loadMunicipios();
+
+                this.showTab('mode');
+                this.updatePendingBadges();
+                this.checkBackendHealth();
+            }
+
+            // Cargar y gestionar lista de municipios
+            loadMunicipios() {
+                const DEFAULT_MUNICIPIOS = [
+                    "Sector Norte - Zona Industrial",
+                    "Sector Sur - Comercial",
+                    "Centro Histórico",
+                    "Mercado Central",
+                    "Zona Rural"
+                ];
+                try {
+                    const raw = localStorage.getItem('health_surveys_municipios');
+                    if (raw) {
+                        this.municipios = JSON.parse(raw);
+                    } else {
+                        this.municipios = [...DEFAULT_MUNICIPIOS];
+                        localStorage.setItem('health_surveys_municipios', JSON.stringify(this.municipios));
+                    }
+                } catch (e) {
+                    this.municipios = [...DEFAULT_MUNICIPIOS];
+                }
+                this.renderMunicipiosSelect();
+                this.renderMunicipiosSettingsList();
+            }
+
+            renderMunicipiosSelect() {
+                const select = document.getElementById('select-municipio');
+                if (!select) return;
+
+                const currentSaved = localStorage.getItem('health_surveys_active_municipio') || (this.municipios[0] || '');
+                select.innerHTML = '';
+
+                this.municipios.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    if (m === currentSaved) opt.selected = true;
+                    select.appendChild(opt);
+                });
+
+                select.onchange = (e) => {
+                    localStorage.setItem('health_surveys_active_municipio', e.target.value);
+                };
+            }
+
+            renderMunicipiosSettingsList() {
+                const list = document.getElementById('municipios-settings-list');
+                if (!list) return;
+                list.innerHTML = '';
+
+                if (this.municipios.length === 0) {
+                    list.innerHTML = '<p class="text-xs text-on-surface-variant italic p-2 bg-surface-dim rounded">No hay municipios configurados. Agrega uno con el campo superior.</p>';
+                    return;
+                }
+
+                this.municipios.forEach((m, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center justify-between p-2.5 bg-surface-dim border border-outline-variant rounded';
+                    row.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[18px]">location_on</span>
+                            <span class="text-xs font-mono text-on-surface font-semibold">${m}</span>
+                        </div>
+                        <button onclick="app.removeMunicipio(${idx})" class="text-error hover:bg-error-container/20 p-1 rounded active:scale-95 transition-transform cursor-pointer" title="Eliminar municipio">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    `;
+                    list.appendChild(row);
+                });
+            }
+
+            addMunicipio() {
+                const input = document.getElementById('input-new-municipio');
+                if (!input) return;
+                const val = input.value.trim();
+                if (!val) {
+                    alert("Por favor escribe el nombre del municipio o sector.");
+                    return;
+                }
+                if (this.municipios.includes(val)) {
+                    alert("Este municipio ya existe en la lista.");
+                    return;
+                }
+                this.municipios.push(val);
+                localStorage.setItem('health_surveys_municipios', JSON.stringify(this.municipios));
+                localStorage.setItem('health_surveys_active_municipio', val);
+                input.value = '';
+                this.renderMunicipiosSelect();
+                this.renderMunicipiosSettingsList();
+                this.showToast(`✅ Municipio "${val}" agregado a la lista.`);
+            }
+
+            removeMunicipio(idx) {
+                if (idx < 0 || idx >= this.municipios.length) return;
+                const removed = this.municipios.splice(idx, 1)[0];
+                localStorage.setItem('health_surveys_municipios', JSON.stringify(this.municipios));
+                this.renderMunicipiosSelect();
+                this.renderMunicipiosSettingsList();
+                this.showToast(`🗑️ Municipio "${removed}" eliminado.`);
+            }
+
+            getSelectedMunicipio() {
+                const select = document.getElementById('select-municipio');
+                if (select && select.value) return select.value.trim();
+                return this.municipios[0] || 'Sector General';
+            }
+
+            showTab(tabName) {
+                this.currentTab = tabName;
+
+                // Hide all tab views
+                ['mode', 'capture', 'sync', 'settings'].forEach(t => {
+                    const el = document.getElementById(`view-${t}`);
+                    if (el) el.classList.add('hidden');
+
+                    const btn = document.getElementById(`nav-btn-${t}`);
+                    if (btn) {
+                        btn.classList.remove('text-primary', 'bg-secondary-container/20', 'rounded-xl');
+                        btn.classList.add('text-on-surface-variant');
+                    }
+                });
+
+                // Show selected tab view
+                const activeView = document.getElementById(`view-${tabName}`);
+                if (activeView) activeView.classList.remove('hidden');
+
+                const activeNavBtn = document.getElementById(`nav-btn-${tabName}`);
+                if (activeNavBtn) {
+                    activeNavBtn.classList.remove('text-on-surface-variant');
+                    activeNavBtn.classList.add('text-primary');
+                }
+
+                if (tabName === 'sync') {
+                    this.loadSurveysList();
+                }
+            }
+
+            // Iniciar sesión de captura según apartado seleccionado (4 o 5 fotos)
+            startCaptureSession(modality = 'Ambulante / Semiestacionario', totalPages = 4) {
+                this.currentModality = modality;
+                this.totalPagesRequired = totalPages;
+                this.activePageIndex = 0;
+                this.capturedPhotos = new Array(totalPages).fill(null);
+
+                // Update Header Badge & Titles
+                const headerBadge = document.getElementById('header-mode-badge');
+                if (headerBadge) {
+                    headerBadge.textContent = `${totalPages} PÁGS`;
+                    headerBadge.classList.remove('hidden');
+                }
+
+                const captureModeTitle = document.getElementById('capture-mode-title');
+                if (captureModeTitle) {
+                    captureModeTitle.textContent = `${modality.toUpperCase()} (${totalPages} HOJAS)`;
+                }
+
+                this.renderThumbnailStrip();
+                this.updateCaptureUIState();
+                this.showTab('capture');
+            }
+
+            // Obtener definición de la hoja actual
+            getSheetDef(index) {
+                const defs = this.sheetDefinitions[this.totalPagesRequired] || this.sheetDefinitions[4];
+                return defs[index] || {
+                    title: `Hoja ${index + 1}`,
+                    subtitle: `Página ${index + 1} de la encuesta`,
+                    short: `Hoja ${index + 1}`
+                };
+            }
+
+            // Renderizar la tira horizontal de miniaturas con los slots requeridos
+            renderThumbnailStrip() {
+                const list = document.getElementById('thumbnail-strip-list');
+                if (!list) return;
+                list.innerHTML = '';
+
+                const totalSlots = this.totalPagesRequired;
+                let capturedCount = 0;
+
+                for (let i = 0; i < totalSlots; i++) {
+                    const photo = this.capturedPhotos[i];
+                    const isCaptured = Boolean(photo);
+                    if (isCaptured) capturedCount++;
+
+                    const isActive = i === this.activePageIndex;
+                    const sheetDef = this.getSheetDef(i);
+
+                    const item = document.createElement('div');
+                    item.className = 'w-20 h-28 sm:w-24 sm:h-32 aspect-[1/1.38] shrink-0 rounded-lg border-2 flex flex-col items-center justify-between p-1.5 snap-center relative cursor-pointer overflow-hidden transition-all ' +
+                        (isActive
+                            ? 'border-primary bg-surface-container-highest shadow-[0_0_0_2px_rgba(255,184,0,0.5)] scale-102'
+                            : (isCaptured ? 'border-outline bg-surface-container-low hover:border-primary/60' : 'border-dashed border-outline-variant bg-surface-dim hover:border-outline'));
+
+                    if (isCaptured) {
+                        item.innerHTML = `
+                            <img src="${photo}" class="w-full h-full object-cover absolute inset-0 rounded" alt="${sheetDef.short}"/>
+                            <div class="absolute top-1 left-1 bg-surface/90 border border-outline-variant px-1 rounded font-data-lg text-[9px] text-primary font-bold z-10">P${i + 1}</div>
+                            <div class="absolute top-1 right-1 bg-green-500/90 text-black px-1 rounded-full text-[10px] font-bold z-10">✓</div>
+                            <div class="absolute bottom-1 left-1 right-1 bg-surface/90 text-on-surface text-[9px] font-mono truncate px-1 rounded z-10 text-center font-semibold">${sheetDef.short}</div>
+                            <div class="absolute inset-0 bg-primary/10 opacity-0 hover:opacity-100 transition-opacity z-10 flex items-center justify-center gap-1">
+                                <button onclick="event.stopPropagation(); app.rotatePhoto(${i})" class="bg-surface/90 hover:bg-primary/30 border border-outline rounded p-0.5 text-primary shadow" title="Girar 90°">
+                                    <span class="material-symbols-outlined text-[12px]">rotate_right</span>
+                                </button>
+                                <button onclick="event.stopPropagation(); app.deletePhoto(${i})" class="bg-surface/90 hover:bg-error/30 border border-outline rounded p-0.5 text-error shadow" title="Eliminar">
+                                    <span class="material-symbols-outlined text-[12px]">delete</span>
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        item.innerHTML = `
+                            <div class="w-full flex justify-between items-center text-[10px] font-mono text-on-surface-variant font-bold">
+                                <span>P${i + 1}</span>
+                                <span class="text-[9px] text-primary/70">Vacía</span>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+                            </div>
+                            <span class="text-[9px] font-mono text-on-surface-variant text-center font-medium leading-tight">${sheetDef.short}</span>
+                        `;
+                    }
+
+                    item.onclick = () => this.setActivePage(i);
+                    list.appendChild(item);
+                }
+
+                // Update counter text & badge
+                const counterLabel = document.getElementById('strip-counter-label');
+                if (counterLabel) counterLabel.textContent = `${capturedCount} / ${totalSlots} Hojas`;
+
+                const countBadge = document.getElementById('capture-photos-count-badge');
+                if (countBadge) countBadge.textContent = `${capturedCount} / ${totalSlots} Hojas`;
+
+                // Actualizar botones de guardar y envío directo
+                const btnSave = document.getElementById('btn-save-survey');
+                const btnSendDirect = document.getElementById('btn-send-direct');
+                const isReady = capturedCount >= totalSlots;
+                const hasAny = capturedCount >= 1;
+
+                if (btnSave) {
+                    btnSave.disabled = !hasAny;
+                    if (hasAny) {
+                        btnSave.className = 'flex-1 h-touch-target bg-surface-container text-on-surface border-2 border-outline hover:border-primary rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-pointer transition-all font-bold shadow';
+                    } else {
+                        btnSave.className = 'flex-1 h-touch-target bg-surface-container-highest text-on-surface-variant border-2 border-outline-variant rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-not-allowed opacity-60 transition-all font-bold';
+                    }
+                }
+
+                if (btnSendDirect) {
+                    btnSendDirect.disabled = !hasAny;
+                    if (isReady) {
+                        btnSendDirect.className = 'flex-1 h-touch-target bg-primary-container text-on-primary-container border-2 border-on-primary-container rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:bg-primary transition-all font-bold animate-pulse';
+                    } else if (hasAny) {
+                        btnSendDirect.className = 'flex-1 h-touch-target bg-primary-container/80 text-on-primary-container border-2 border-on-primary-container/80 rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-pointer shadow hover:bg-primary transition-all font-bold';
+                    } else {
+                        btnSendDirect.className = 'flex-1 h-touch-target bg-surface-container-highest text-on-surface-variant border-2 border-outline-variant rounded font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-not-allowed opacity-60 transition-all font-bold';
+                    }
+                }
+            }
+
+            // Cambiar la página activa
+            setActivePage(index) {
+                if (index < 0 || index >= this.totalPagesRequired) return;
+                this.activePageIndex = index;
+                this.updateCaptureUIState();
+                this.renderThumbnailStrip();
+            }
+
+            // Actualizar visualización del slot central de hoja
+            updateCaptureUIState() {
+                const sheetDef = this.getSheetDef(this.activePageIndex);
+                const isCaptured = Boolean(this.capturedPhotos[this.activePageIndex]);
+
+                // Subtítulo superior
+                const pageSubtitle = document.getElementById('capture-page-subtitle');
+                if (pageSubtitle) {
+                    pageSubtitle.textContent = `${sheetDef.title}`;
+                }
+
+                const emptyPlaceholder = document.getElementById('sheet-empty-placeholder');
+                const capturedPreview = document.getElementById('sheet-captured-preview');
+                const previewImg = document.getElementById('capture-preview-img');
+                const emptyTitle = document.getElementById('sheet-empty-title');
+                const emptyDesc = document.getElementById('sheet-empty-desc');
+                const capturedTag = document.getElementById('sheet-captured-tag');
+
+                if (isCaptured) {
+                    if (emptyPlaceholder) emptyPlaceholder.classList.add('hidden');
+                    if (capturedPreview) capturedPreview.classList.remove('hidden');
+                    if (previewImg) previewImg.src = this.capturedPhotos[this.activePageIndex];
+                    if (capturedTag) capturedTag.textContent = `HOJA ${this.activePageIndex + 1} DE ${this.totalPagesRequired} • ${sheetDef.short}`;
+                } else {
+                    if (capturedPreview) capturedPreview.classList.add('hidden');
+                    if (emptyPlaceholder) emptyPlaceholder.classList.remove('hidden');
+                    if (emptyTitle) {
+                        emptyTitle.textContent = `Tomar Foto de Hoja ${this.activePageIndex + 1}`;
+                    }
+                    if (emptyDesc) {
+                        emptyDesc.textContent = `${sheetDef.subtitle}`;
+                    }
+                }
+            }
+
+            // Abrir la cámara nativa del celular directamente
+            triggerNativeCamera() {
+                const cameraInput = document.getElementById('native-camera-input');
+                if (cameraInput) {
+                    cameraInput.click();
+                }
+            }
+
+            // Compresión, orientación vertical automática y realce óptico a max 1600px
+            async compressImage(fileOrDataUrl, maxDimension = 1600, quality = 0.88, rotateAngle = 0) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        let width = img.naturalWidth || img.width;
+                        let height = img.naturalHeight || img.height;
+
+                        // Si la imagen es horizontal (width > height) y no se dio rotación manual, auto-rotar 90° a vertical
+                        let effectiveAngle = (rotateAngle % 360 + 360) % 360;
+                        if (rotateAngle === 0 && width > height) {
+                            effectiveAngle = 90;
+                        }
+
+                        // Escalar manteniendo proporción
+                        if (width > maxDimension || height > maxDimension) {
+                            if (width > height) {
+                                height = Math.round((height * maxDimension) / width);
+                                width = maxDimension;
+                            } else {
+                                width = Math.round((width * maxDimension) / height);
+                                height = maxDimension;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        if (effectiveAngle === 90 || effectiveAngle === 270) {
+                            canvas.width = height;
+                            canvas.height = width;
+                        } else {
+                            canvas.width = width;
+                            canvas.height = height;
+                        }
+
+                        ctx.filter = 'contrast(1.12) brightness(1.02)';
+
+                        if (effectiveAngle === 90) {
+                            ctx.translate(height, 0);
+                            ctx.rotate(Math.PI / 2);
+                            ctx.drawImage(img, 0, 0, width, height);
+                        } else if (effectiveAngle === 180) {
+                            ctx.translate(width, height);
+                            ctx.rotate(Math.PI);
+                            ctx.drawImage(img, 0, 0, width, height);
+                        } else if (effectiveAngle === 270) {
+                            ctx.translate(0, width);
+                            ctx.rotate((3 * Math.PI) / 2);
+                            ctx.drawImage(img, 0, 0, width, height);
+                        } else {
+                            ctx.drawImage(img, 0, 0, width, height);
+                        }
+
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                        resolve(compressedBase64);
+                    };
+                    img.onerror = () => reject(new Error("No se pudo procesar la imagen"));
+
+                    if (typeof fileOrDataUrl === 'string') {
+                        img.src = fileOrDataUrl;
+                    } else if (fileOrDataUrl instanceof Blob || fileOrDataUrl instanceof File) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => { img.src = e.target.result; };
+                        reader.onerror = () => reject(new Error("Error leyendo el archivo"));
+                        reader.readAsDataURL(fileOrDataUrl);
+                    } else {
+                        reject(new Error("Formato de imagen desconocido"));
+                    }
+                });
+            }
+
+            // Manejar subida de archivo nativa (Galería o Cámara del SO) con compresión y asignación de slots
+            async handleNativeFileUpload(event) {
+                const files = Array.from(event.target.files || []);
+                if (files.length === 0) return;
+
+                try {
+                    this.showToast(`Optimizando y orientando ${files.length} imagen(es)...`);
+                    
+                    let targetIndex = this.activePageIndex;
+                    for (const file of files) {
+                        const compressedBase64 = await this.compressImage(file);
+                        if (targetIndex < this.totalPagesRequired) {
+                            this.capturedPhotos[targetIndex] = compressedBase64;
+                            targetIndex++;
+                        }
+                    }
+
+                    // Encontrar el siguiente slot vacío o quedarse en el último capturado
+                    const nextEmpty = this.capturedPhotos.findIndex(p => p === null);
+                    if (nextEmpty !== -1) {
+                        this.activePageIndex = nextEmpty;
+                    } else {
+                        this.activePageIndex = Math.min(this.activePageIndex, this.totalPagesRequired - 1);
+                    }
+
+                    this.renderThumbnailStrip();
+                    this.updateCaptureUIState();
+                    
+                    const totalCaptured = this.capturedPhotos.filter(Boolean).length;
+                    this.showToast(`✅ ${files.length} foto(s) guardada(s). Total: ${totalCaptured} de ${this.totalPagesRequired}`);
+                } catch (err) {
+                    console.error("Error optimizando imagen:", err);
+                    alert("Error procesando imagen: " + err.message);
+                } finally {
+                    event.target.value = '';
+                }
+            }
+
+            // Rotar una foto específica 90° en sentido horario
+            async rotatePhoto(index) {
+                if (index < 0 || index >= this.totalPagesRequired || !this.capturedPhotos[index]) return;
+                try {
+                    this.showToast("Girando imagen 90°...");
+                    const current = this.capturedPhotos[index];
+                    const rotated = await this.compressImage(current, 1600, 0.88, 90);
+                    this.capturedPhotos[index] = rotated;
+                    this.updateCaptureUIState();
+                    this.renderThumbnailStrip();
+                } catch (e) {
+                    console.error("Error rotando foto:", e);
+                }
+            }
+
+            // Rotar la foto actualmente en pantalla
+            rotateActivePhoto() {
+                if (this.capturedPhotos[this.activePageIndex]) {
+                    this.rotatePhoto(this.activePageIndex);
+                } else {
+                    this.showToast("Primero toma o selecciona una foto para este slot.");
+                }
+            }
+
+            // Eliminar una foto específica
+            deletePhoto(index) {
+                if (index < 0 || index >= this.totalPagesRequired) return;
+                this.capturedPhotos[index] = null;
+                this.renderThumbnailStrip();
+                this.updateCaptureUIState();
+                this.showToast(`Foto de Hoja ${index + 1} eliminada.`);
+            }
+
+            // Eliminar la foto activa
+            deleteActivePhoto() {
+                this.deletePhoto(this.activePageIndex);
+            }
+
+            // Limpiar todas las fotos
+            clearAllPhotos() {
+                const totalCaptured = this.capturedPhotos.filter(Boolean).length;
+                if (totalCaptured === 0) return;
+                if (confirm("¿Desea limpiar todas las fotos capturadas de esta encuesta?")) {
+                    this.capturedPhotos = new Array(this.totalPagesRequired).fill(null);
+                    this.activePageIndex = 0;
+                    this.renderThumbnailStrip();
+                    this.updateCaptureUIState();
+                    this.showToast("Capturas reiniciadas.");
+                }
+            }
+
+            // ENVÍO DIRECTO INMEDIATO A GOOGLE SHEETS
+            async sendCurrentSurveyDirectly() {
+                const validPhotos = this.capturedPhotos.filter(Boolean);
+                if (validPhotos.length === 0) {
+                    alert(`Por favor capture las ${this.totalPagesRequired} hojas de la encuesta antes de enviar.`);
+                    return;
+                }
+
+                if (validPhotos.length < this.totalPagesRequired) {
+                    if (!confirm(`Atención: Ha capturado ${validPhotos.length} de ${this.totalPagesRequired} hojas requeridas. ¿Desea enviar de todas formas?`)) {
+                        return;
+                    }
+                }
+
+                const municipio = this.getSelectedMunicipio();
+                const timestamp = Date.now();
+                const rand = Math.floor(Math.random() * 900) + 100;
+                const surveyId = `SURV-${timestamp}-${rand}`;
+
+                const surveyRecord = {
+                    id: surveyId,
+                    modalidad: this.currentModality,
+                    total_paginas: validPhotos.length,
+                    municipio: municipio,
+                    fecha: null, // Extraído directamente en formato YYYY-MM-DD por la IA
+                    fotos: [...validPhotos],
+                    estado: 'PROCESANDO',
+                    created_at: new Date().toISOString()
+                };
+
+                // Guardar estado inicial en local
+                await window.surveyStorage.saveSurvey(surveyRecord);
+                this.updatePendingBadges();
+
+                // Mostrar modal de progreso
+                const sendingModal = document.getElementById('direct-sending-modal');
+                const sendingText = document.getElementById('direct-sending-status-text');
+                sendingModal.classList.remove('hidden');
+                sendingText.textContent = `Extrayendo 64 columnas con precisión multimodal (${validPhotos.length} fotos, ${this.currentModality})...`;
+
+                try {
+                    const response = await fetch('/api/process-survey', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: surveyRecord.id,
+                            modalidad: surveyRecord.modalidad,
+                            municipio: surveyRecord.municipio,
+                            fecha: null,
+                            fotos: surveyRecord.fotos,
+                            enviar_a_sheets: true
+                        })
+                    });
+
+                    const result = await response.json();
+                    sendingModal.classList.add('hidden');
+
+                    if (response.ok && result.success) {
+                        surveyRecord.modalidad = result.modalidad || surveyRecord.modalidad;
+                        await window.surveyStorage.updateSurveyStatus(surveyRecord.id, 'ENVIADO', result.datos_extraidos, null);
+                        this.openDirectSuccessModal(surveyRecord, result);
+                    } else {
+                        const errMsg = result.error || 'Error procesando la encuesta en el servidor';
+                        await window.surveyStorage.updateSurveyStatus(surveyRecord.id, 'ERROR', null, errMsg);
+                        alert(`Aviso: ${errMsg}\nLa encuesta quedó guardada en la bandeja para reintentar cuando haya mejor conexión.`);
+                        this.showTab('sync');
+                    }
+                } catch (err) {
+                    sendingModal.classList.add('hidden');
+                    await window.surveyStorage.updateSurveyStatus(surveyRecord.id, 'ERROR', null, err.message);
+                    alert(`Error de conexión: ${err.message}\nLa encuesta se guardó en la bandeja de sincronización para enviarla después.`);
+                    this.showTab('sync');
+                } finally {
+                    this.updatePendingBadges();
+                }
+            }
+
+            openDirectSuccessModal(survey, result) {
+                const modal = document.getElementById('direct-success-modal');
+                const workerName = result.nombre_trabajador || 'Trabajador Identificado';
+                const idDoc = (result.datos_extraidos && result.datos_extraidos['7. Número de Identificación']) || 'N/A';
+                const detectedMod = result.modalidad || survey.modalidad || 'Auto-detectada';
+                const totalP = result.total_fotos || survey.total_paginas || (survey.fotos ? survey.fotos.length : 0);
+
+                document.getElementById('success-modal-worker').textContent = workerName;
+                document.getElementById('success-modal-id').textContent = `Doc/CC: ${idDoc} • ID: ${survey.id}`;
+                document.getElementById('success-modal-modality').textContent = `Modalidad: ${detectedMod} (${totalP} Págs) • ${survey.municipio}`;
+
+                modal.classList.remove('hidden');
+            }
+
+            startNextSurveyAfterSuccess() {
+                document.getElementById('direct-success-modal').classList.add('hidden');
+                // Limpiar fotos y reiniciar captura manteniendo la modalidad y municipio
+                this.capturedPhotos = new Array(this.totalPagesRequired).fill(null);
+                this.activePageIndex = 0;
+                this.renderThumbnailStrip();
+                this.updateCaptureUIState();
+                this.showToast("Listo para capturar siguiente encuesta.");
+            }
+
+            viewInTrayAfterSuccess() {
+                document.getElementById('direct-success-modal').classList.add('hidden');
+                this.capturedPhotos = new Array(this.totalPagesRequired).fill(null);
+                this.activePageIndex = 0;
+                this.showTab('sync');
+            }
+
+            // Guardar encuesta en cola local (Offline)
+            async saveCurrentSurveyToStorage() {
+                const validPhotos = this.capturedPhotos.filter(Boolean);
+                if (validPhotos.length === 0) {
+                    alert(`Por favor capture al menos 1 página de la encuesta antes de guardar.`);
+                    return;
+                }
+
+                const municipio = this.getSelectedMunicipio();
+                const surveyRecord = {
+                    modalidad: this.currentModality,
+                    total_paginas: validPhotos.length,
+                    municipio: municipio,
+                    fecha: null,
+                    fotos: [...validPhotos],
+                    estado: 'PENDIENTE',
+                    created_at: new Date().toISOString()
+                };
+
+                try {
+                    const saved = await window.surveyStorage.saveSurvey(surveyRecord);
+                    this.updatePendingBadges();
+                    this.showToast(`✅ Encuesta ${saved.id} guardada en cola local (${validPhotos.length}/${this.totalPagesRequired} fotos).`);
+
+                    // Reiniciar para la siguiente encuesta
+                    this.capturedPhotos = new Array(this.totalPagesRequired).fill(null);
+                    this.activePageIndex = 0;
+                    this.renderThumbnailStrip();
+                    this.updateCaptureUIState();
+                } catch (err) {
+                    console.error("Aviso al guardar:", err);
+                    alert("Aviso al guardar en cola: " + err.message);
+                }
+            }
+
+            // Cargar y listar encuestas de IndexedDB en la Bandeja de Sync
+            async loadSurveysList() {
+                const allSurveys = await window.surveyStorage.getAllSurveys();
+                const container = document.getElementById('survey-list-container');
+                const emptyState = document.getElementById('survey-empty-state');
+                const countBadge = document.getElementById('sync-summary-count');
+
+                const pendingCount = allSurveys.filter(s => s.estado === 'PENDIENTE' || s.estado === 'ERROR').length;
+                countBadge.textContent = pendingCount;
+                this.updatePendingBadges();
+
+                if (allSurveys.length === 0) {
+                    container.innerHTML = '';
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                emptyState.classList.add('hidden');
+                container.innerHTML = '';
+
+                allSurveys.forEach(survey => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-surface-container border-2 border-outline-variant p-4 md:p-gutter-md flex flex-col gap-3 relative rounded';
+
+                    // Status Badge Styling
+                    let statusBadge = '';
+                    if (survey.estado === 'ENVIADO') {
+                        statusBadge = `<div class="bg-tertiary-container text-on-tertiary-container font-label-caps text-xs px-2.5 py-1 rounded flex items-center gap-1 font-bold">
+                            <span class="material-symbols-outlined text-[16px] icon-fill">check_circle</span> ENVIADO
+                        </div>`;
+                    } else if (survey.estado === 'PROCESANDO') {
+                        statusBadge = `<div class="bg-primary-container text-on-primary-container font-label-caps text-xs px-2.5 py-1 rounded flex items-center gap-1 font-bold animate-pulse">
+                            <span class="material-symbols-outlined text-[16px] animate-spin">sync</span> PROCESANDO
+                        </div>`;
+                    } else if (survey.estado === 'ERROR') {
+                        statusBadge = `<div class="bg-error-container text-on-error-container font-label-caps text-xs px-2.5 py-1 rounded flex items-center gap-1 font-bold">
+                            <span class="material-symbols-outlined text-[16px]">error</span> ERROR
+                        </div>`;
+                    } else {
+                        statusBadge = `<div class="border-2 border-outline text-on-surface font-label-caps text-xs px-2.5 py-1 rounded flex items-center gap-1 font-bold">
+                            <span class="material-symbols-outlined text-[16px]">schedule</span> PENDIENTE
+                        </div>`;
+                    }
+
+                    // Worker Name if extracted
+                    const workerName = survey.resultado_extraccion ?
+                        `${survey.resultado_extraccion['5. Nombre'] || ''} ${survey.resultado_extraccion['5.1 Apellido'] || ''}`.trim() : '';
+
+                    // Thumbnails list
+                    const thumbsHtml = (survey.fotos || []).map((f, idx) => `
+                        <div class="w-14 h-14 bg-cover bg-center border border-outline bg-surface-container-highest rounded overflow-hidden relative shrink-0">
+                            <img src="${f}" class="w-full h-full object-cover" alt="Pág ${idx + 1}"/>
+                            <span class="absolute bottom-0 right-0 bg-surface/90 text-[9px] font-mono px-1">P${idx + 1}</span>
+                        </div>
+                    `).join('');
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start border-b border-outline-variant pb-2">
+                            <div>
+                                <div class="font-data-lg text-sm text-on-surface font-bold">${survey.id}</div>
+                                <div class="text-xs text-on-surface-variant font-mono">${survey.modalidad} (${survey.total_paginas} Págs) • ${survey.municipio}</div>
+                                ${workerName ? `<div class="text-xs text-primary font-bold mt-0.5">Trabajador: ${workerName}</div>` : ''}
+                            </div>
+                            ${statusBadge}
+                        </div>
+
+                        <!-- Thumbnails Row -->
+                        <div class="flex gap-2 overflow-x-auto py-1 hide-scrollbar">
+                            ${thumbsHtml}
+                        </div>
+
+                        ${survey.error_mensaje ? `<div class="text-xs text-error font-mono bg-error/10 p-2 rounded border border-error/30">${survey.error_mensaje}</div>` : ''}
+
+                        <!-- Action buttons -->
+                        <div class="flex justify-between items-center pt-2 border-t border-outline-variant text-xs">
+                            <span class="text-on-surface-variant text-[11px] font-mono">${new Date(survey.created_at).toLocaleString()}</span>
+                            <div class="flex gap-2">
+                                <button onclick="app.openDetailModal('${survey.id}')" class="px-3 py-1.5 bg-surface-dim hover:bg-surface-container-highest border border-outline text-primary font-label-caps rounded flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">visibility</span> Ver Detalle
+                                </button>
+                                <button onclick="app.deleteSurvey('${survey.id}')" class="px-2 py-1.5 bg-surface-dim hover:bg-error/20 border border-outline-variant text-error font-label-caps rounded flex items-center">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                });
+            }
+
+            // Ejecutar Sincronización en Lote (Batch Sync con Backend)
+            async executeBatchSync() {
+                if (this.isSyncing) return;
+
+                const pendingSurveys = await window.surveyStorage.getPendingSurveys();
+                if (pendingSurveys.length === 0) {
+                    alert("No hay encuestas pendientes para sincronizar.");
+                    return;
+                }
+
+                this.isSyncing = true;
+                const btnSync = document.getElementById('btn-sync-batch');
+                const progressBox = document.getElementById('sync-progress-box');
+                const progressBar = document.getElementById('sync-progress-bar');
+                const progressLabel = document.getElementById('sync-progress-label');
+                const successBox = document.getElementById('sync-success-box');
+                const logBox = document.getElementById('sync-console-log');
+
+                btnSync.classList.add('hidden');
+                successBox.classList.add('hidden');
+                progressBox.classList.remove('hidden');
+                progressBox.classList.add('flex');
+
+                let processedCount = 0;
+                const total = pendingSurveys.length;
+                logBox.innerHTML = `[${new Date().toLocaleTimeString()}] Iniciando lote de ${total} encuestas...<br/>`;
+
+                for (const survey of pendingSurveys) {
+                    try {
+                        // Actualizar estado a PROCESANDO
+                        await window.surveyStorage.updateSurveyStatus(survey.id, 'PROCESANDO');
+                        this.loadSurveysList();
+
+                        logBox.innerHTML += `[${new Date().toLocaleTimeString()}] Procesando ${survey.id} (${survey.modalidad})...<br/>`;
+                        logBox.scrollTop = logBox.scrollHeight;
+
+                        // Petición a la API del backend
+                        const response = await fetch('/api/process-survey', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: survey.id,
+                                modalidad: (survey.modalidad && survey.modalidad !== 'Auto-detectada') ? survey.modalidad : null,
+                                municipio: survey.municipio,
+                                fecha: survey.fecha,
+                                fotos: survey.fotos,
+                                enviar_a_sheets: true
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok && result.success) {
+                            await window.surveyStorage.updateSurveyStatus(survey.id, 'ENVIADO', result.datos_extraidos, null, result.modalidad);
+                            logBox.innerHTML += `<span class="text-green-400">✓ ${survey.id} enviada con éxito (${result.modalidad || 'Auto'}). Trabajador: ${result.nombre_trabajador || 'N/A'}</span><br/>`;
+                        } else {
+                            const errMsg = result.error || 'Error desconocido del servidor';
+                            await window.surveyStorage.updateSurveyStatus(survey.id, 'ERROR', null, errMsg);
+                            logBox.innerHTML += `<span class="text-red-400">✗ ${survey.id} falló: ${errMsg}</span><br/>`;
+                        }
+                    } catch (netErr) {
+                        await window.surveyStorage.updateSurveyStatus(survey.id, 'ERROR', null, netErr.message);
+                        logBox.innerHTML += `<span class="text-red-400">✗ Error de red en ${survey.id}: ${netErr.message}</span><br/>`;
+                    }
+
+                    processedCount++;
+                    const percent = Math.round((processedCount / total) * 100);
+                    progressBar.style.width = `${percent}%`;
+                    progressLabel.textContent = `Procesando encuestas (${processedCount}/${total})...`;
+                    this.loadSurveysList();
+                }
+
+                this.isSyncing = false;
+
+                // Mostrar éxito
+                progressBox.classList.add('hidden');
+                progressBox.classList.remove('flex');
+                successBox.classList.remove('hidden');
+
+                setTimeout(() => {
+                    successBox.classList.add('hidden');
+                    btnSync.classList.remove('hidden');
+                    progressBar.style.width = '0%';
+                }, 4000);
+
+                this.loadSurveysList();
+            }
+
+            // Sincronizar una sola encuesta desde el modal
+            async syncSingleSurveyFromModal() {
+                if (!this.activeModalSurvey || this.isSyncing) return;
+
+                const survey = this.activeModalSurvey;
+                const btn = document.getElementById('modal-resync-btn');
+                btn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">sync</span> Procesando...`;
+                btn.disabled = true;
+
+                try {
+                    const response = await fetch('/api/process-survey', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: survey.id,
+                            modalidad: (survey.modalidad && survey.modalidad !== 'Auto-detectada') ? survey.modalidad : null,
+                            municipio: survey.municipio,
+                            fecha: survey.fecha,
+                            fotos: survey.fotos,
+                            enviar_a_sheets: true
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        await window.surveyStorage.updateSurveyStatus(survey.id, 'ENVIADO', result.datos_extraidos, null, result.modalidad);
+                        this.showToast(`Encuesta ${survey.id} sincronizada correctamente.`);
+                        this.openDetailModal(survey.id);
+                    } else {
+                        alert("Error al sincronizar: " + (result.error || 'Error desconocido'));
+                    }
+                } catch (e) {
+                    alert("Error de conexión: " + e.message);
+                } finally {
+                    btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">sync</span> Sincronizar Esta Encuesta`;
+                    btn.disabled = false;
+                    this.loadSurveysList();
+                }
+            }
+
+            // Abrir Modal de Detalles con las 64 columnas
+            async openDetailModal(id) {
+                const survey = await window.surveyStorage.getSurvey(id);
+                if (!survey) return;
+
+                this.activeModalSurvey = survey;
+                document.getElementById('modal-survey-id').textContent = survey.id;
+                document.getElementById('modal-survey-subtitle').textContent =
+                    `${survey.modalidad} • ${survey.municipio} • ${survey.fecha} • Estado: ${survey.estado}`;
+
+                // Render Photos in Modal
+                const photosGrid = document.getElementById('modal-photos-grid');
+                photosGrid.innerHTML = (survey.fotos || []).map((f, idx) => `
+                    <div class="w-24 h-32 shrink-0 border border-outline rounded overflow-hidden bg-black relative">
+                        <img src="${f}" class="w-full h-full object-cover" alt="Foto ${idx + 1}"/>
+                        <span class="absolute top-1 left-1 bg-surface/80 text-[10px] px-1 font-mono rounded">Pág ${idx + 1}</span>
+                    </div>
+                `).join('');
+
+                // Render 64 Columns Table Body
+                const tbody = document.getElementById('modal-columns-table-body');
+                tbody.innerHTML = '';
+
+                const data = survey.resultado_extraccion || {};
+                const keys = Object.keys(data).length > 0 ? Object.keys(data) : [
+                    "1. Fecha de caracterización", "NÚMERO DE FICHA", "2. Forma en la que el trabajador desarrolla su ocupación u oficio",
+                    "3. Municipio donde se desarrolla la ocupación", "4. Ámbito Territorial", "5. Nombre", "5.1 Apellido",
+                    "6. Tipo de Identificación", "7. Número de Identificación", "8. Fecha de Nacimiento", "9. Ocupación u oficio",
+                    "10. Sexo biológico del rabajador", "¿SEGUNDA HOJA PARTE II - CONDICIONES DEL LUGAR DE TRABAJO?"
+                ];
+
+                keys.forEach(k => {
+                    const val = data[k] !== undefined ? data[k] : '(Pendiente de sincronización)';
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-surface-container-high';
+                    tr.innerHTML = `
+                        <td class="p-2 border-b border-outline-variant text-on-surface-variant font-medium">${k}</td>
+                        <td class="p-2 border-b border-outline-variant text-on-surface ${val ? 'font-bold text-primary' : 'opacity-40'}">${val || '—'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('survey-detail-modal').classList.remove('hidden');
+            }
+
+            closeModal() {
+                document.getElementById('survey-detail-modal').classList.add('hidden');
+                this.activeModalSurvey = null;
+            }
+
+            copyExtractedDataJSON() {
+                if (!this.activeModalSurvey || !this.activeModalSurvey.resultado_extraccion) {
+                    alert("No hay datos extraídos para copiar.");
+                    return;
+                }
+                navigator.clipboard.writeText(JSON.stringify(this.activeModalSurvey.resultado_extraccion, null, 2));
+                this.showToast("JSON copiado al portapapeles.");
+            }
+
+            async deleteSurvey(id) {
+                if (confirm(`¿Desea eliminar la encuesta ${id} del almacenamiento local?`)) {
+                    await window.surveyStorage.deleteSurvey(id);
+                    this.loadSurveysList();
+                    this.updatePendingBadges();
+                }
+            }
+
+            async clearCompletedSurveys() {
+                if (confirm("¿Eliminar todas las encuestas ya sincronizadas (ENVIADO)?")) {
+                    await window.surveyStorage.clearCompletedSurveys();
+                    this.loadSurveysList();
+                    this.showToast("Encuestas completadas eliminadas.");
+                }
+            }
+
+            async exportSurveysJSON() {
+                const all = await window.surveyStorage.getAllSurveys();
+                const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup_encuestas_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+            }
+
+            // Actualizar contadores numéricos en badges
+            async updatePendingBadges() {
+                const summary = await window.surveyStorage.countSummary();
+                const topBadge = document.getElementById('top-badge-pending');
+                const navBadge = document.getElementById('nav-badge-pending');
+
+                if (summary.pendientes > 0) {
+                    topBadge.textContent = summary.pendientes;
+                    topBadge.classList.remove('hidden');
+                    navBadge.textContent = summary.pendientes;
+                    navBadge.classList.remove('hidden');
+                } else {
+                    topBadge.classList.add('hidden');
+                    navBadge.classList.add('hidden');
+                }
+            }
+
+            // Diagnósticos: Verificar Health del backend, motor local Ollama y Gemini Fallback
+            async checkBackendHealth(showLog = false) {
+                const dot = document.getElementById('backend-status-dot');
+                const txt = document.getElementById('backend-status-text');
+                const badge = document.getElementById('ai-engine-badge');
+                const nameSpan = document.getElementById('ai-engine-name');
+                const fallbackSpan = document.getElementById('ai-engine-fallback');
+                const out = document.getElementById('diagnostic-output');
+
+                try {
+                    const res = await fetch('/api/health');
+                    const data = await res.json();
+                    if (data.status === 'healthy') {
+                        const ollamaOnline = data.ollama && data.ollama.disponible;
+                        if (ollamaOnline) {
+                            dot.className = 'w-2.5 h-2.5 rounded-full bg-green-500';
+                            txt.textContent = 'GPU OLLAMA ONLINE';
+                            txt.className = 'font-label-caps text-[10px] text-green-400 uppercase font-bold';
+                        } else {
+                            dot.className = 'w-2.5 h-2.5 rounded-full bg-blue-500';
+                            txt.textContent = 'CLOUD GEMINI FALLBACK';
+                            txt.className = 'font-label-caps text-[10px] text-blue-400 uppercase font-bold';
+                        }
+
+                        if (nameSpan) {
+                            nameSpan.textContent = `${data.proveedor_activo === 'ollama' ? 'Ollama Local' : 'Gemini Cloud'} (${data.modelo_activo})`;
+                        }
+                        if (badge) {
+                            badge.textContent = ollamaOnline ? 'GPU RTX 4060 ONLINE' : 'GEMINI FALLBACK ACTIVO';
+                            badge.className = ollamaOnline
+                                ? 'font-label-caps text-[9px] px-1.5 py-0.5 rounded bg-green-500/20 text-green-400 border border-green-500/30 font-bold uppercase'
+                                : 'font-label-caps text-[9px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold uppercase';
+                        }
+                        if (fallbackSpan) {
+                            fallbackSpan.textContent = `Ollama: ${ollamaOnline ? 'Conectado' : 'Sin conexión local'} | Gemini Fallback: ${data.gemini?.modelo_fallback || 'Activo'} | Res: Max 1400px`;
+                        }
+
+                        if (showLog && out) {
+                            out.classList.remove('hidden');
+                            out.textContent = JSON.stringify(data, null, 2);
+                        }
+                    }
+                } catch (e) {
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
+                    txt.textContent = 'BACKEND OFFLINE';
+                    txt.className = 'font-label-caps text-[10px] text-red-400 uppercase';
+                    if (showLog && out) {
+                        out.classList.remove('hidden');
+                        out.textContent = "Error conectando al backend: " + e.message;
+                    }
+                }
+            }
+
+            // Diagnóstico: Probar Webhook Directo
+            async runWebhookDirectTest() {
+                const out = document.getElementById('diagnostic-output');
+                out.classList.remove('hidden');
+                out.textContent = "Enviando ping de prueba al Webhook de Google Apps Script...";
+
+                try {
+                    const res = await fetch('/api/webhook-test', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ override_nombre: 'PING_DIAGNOSTICO_WEB' })
+                    });
+                    const data = await res.json();
+                    out.textContent = JSON.stringify(data, null, 2);
+                } catch (err) {
+                    out.textContent = "Error ejecutando test de webhook: " + err.message;
+                }
+            }
+
+            showToast(msg) {
+                const toast = document.createElement('div');
+                toast.className = 'fixed top-16 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary-container font-label-caps text-xs font-bold px-4 py-2 rounded-lg shadow-xl z-50 animate-bounce';
+                toast.textContent = msg;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        }
+
+        // Inicializar aplicación al cargar el DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new HealthSurveyApp();
+            window.app.init();
+        });
+    </script>
+</body>
+
+</html>

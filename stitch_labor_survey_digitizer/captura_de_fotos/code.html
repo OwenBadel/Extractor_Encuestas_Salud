@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Field Survey - Photo Capture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdbce",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary-fixed-dim": "#ffb59a",
+                        "on-surface": "#e5e2e1",
+                        "tertiary-fixed": "#b0ecff",
+                        "surface": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed-variant": "#802a00",
+                        "on-surface-variant": "#d5c4ab",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-fixed-dim": "#17d8ff",
+                        "on-tertiary": "#003641",
+                        "inverse-primary": "#7c5800",
+                        "outline": "#9e8f78",
+                        "on-tertiary-container": "#005a6b",
+                        "on-primary-container": "#6b4c00",
+                        "on-error": "#690005",
+                        "surface-container": "#201f1f",
+                        "inverse-on-surface": "#313030",
+                        "error-container": "#93000a",
+                        "on-secondary": "#5a1b00",
+                        "primary-fixed": "#ffdea8",
+                        "on-secondary-fixed": "#370e00",
+                        "outline-variant": "#514532",
+                        "surface-container-highest": "#353534",
+                        "on-secondary-container": "#531900",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "on-primary-fixed": "#271900",
+                        "on-tertiary-fixed": "#001f27",
+                        "surface-tint": "#ffba20",
+                        "surface-variant": "#353534",
+                        "secondary-container": "#ff5e07",
+                        "background": "#131313",
+                        "surface-dim": "#131313",
+                        "tertiary": "#abebff",
+                        "on-primary": "#412d00",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#ffdca1",
+                        "primary-container": "#ffb800",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-bright": "#393939",
+                        "tertiary-container": "#00d7fe",
+                        "primary-fixed-dim": "#ffba20",
+                        "on-background": "#e5e2e1",
+                        "secondary": "#ffb59a",
+                        "on-tertiary-fixed-variant": "#004e5d",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter-md": "24px",
+                        "unit": "8px",
+                        "margin-edge": "32px",
+                        "touch-target": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "data-lg": ["JetBrains Mono"],
+                        "label-caps": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "data-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Utilitarian grid overlay for viewfinder */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(158, 143, 120, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(158, 143, 120, 0.1) 1px, transparent 1px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar (From JSON) -->
+<header class="w-full top-0 sticky flex items-center justify-between px-margin-edge h-touch-target border-b-2 border-outline-variant bg-surface z-40">
+<button class="w-touch-target h-touch-target flex items-center justify-start text-primary active:scale-95 transition-transform hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-[24px]" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">
+            Field Survey
+        </h1>
+<button class="w-touch-target h-touch-target flex items-center justify-end text-on-surface-variant active:scale-95 transition-transform hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-[24px]" data-icon="cloud_sync">cloud_sync</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col pb-24 relative overflow-hidden">
+<!-- Progress Stepper -->
+<section class="px-margin-edge py-4 bg-surface-container-low border-b-2 border-outline-variant z-10">
+<div class="flex justify-between items-end mb-3">
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-widest uppercase">Captura Fotográfica</span>
+<span class="font-data-lg text-data-lg text-primary-fixed-dim">Página 2 de 5</span>
+</div>
+<div class="flex gap-2 h-3 w-full">
+<!-- Completed -->
+<div class="flex-1 bg-primary rounded-sm border-2 border-primary-container"></div>
+<!-- Current Active -->
+<div class="flex-1 bg-primary-container rounded-sm border-2 border-primary-fixed shadow-[0_0_8px_rgba(255,184,0,0.5)] relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+<!-- Pending -->
+<div class="flex-1 bg-surface-container-highest border-2 border-outline-variant rounded-sm"></div>
+<div class="flex-1 bg-surface-container-highest border-2 border-outline-variant rounded-sm"></div>
+<div class="flex-1 bg-surface-container-highest border-2 border-outline-variant rounded-sm"></div>
+</div>
+</section>
+<!-- Viewfinder (Simulated Camera) -->
+<section class="flex-1 relative bg-surface-container-lowest m-4 rounded-xl border-2 border-outline-variant overflow-hidden flex flex-col items-center justify-center bg-grid-pattern">
+<!-- Contextual Overlay Hint -->
+<div class="absolute top-8 bg-surface-container-high/90 border border-outline py-2 px-4 rounded font-label-caps text-label-caps text-on-surface z-20 backdrop-blur-sm">
+                ALINEAR DOCUMENTO DENTRO DE LAS GUÍAS
+            </div>
+<!-- Central Crosshair -->
+<div class="relative z-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[64px] opacity-30">filter_center_focus</span>
+</div>
+<!-- Thick Industrial Framing Guides -->
+<!-- Top Left -->
+<div class="absolute top-8 left-8 w-16 h-16 border-t-4 border-l-4 border-primary z-20"></div>
+<!-- Top Right -->
+<div class="absolute top-8 right-8 w-16 h-16 border-t-4 border-r-4 border-primary z-20"></div>
+<!-- Bottom Left -->
+<div class="absolute bottom-8 left-8 w-16 h-16 border-b-4 border-l-4 border-primary z-20"></div>
+<!-- Bottom Right -->
+<div class="absolute bottom-8 right-8 w-16 h-16 border-b-4 border-r-4 border-primary z-20"></div>
+<!-- Focus Area Highlight (subtle inner darkening) -->
+<div class="absolute inset-8 border border-dashed border-outline-variant/30 bg-black/10 z-10"></div>
+</section>
+<!-- Primary Controls -->
+<section class="px-margin-edge py-6 flex flex-col items-center gap-6 shrink-0 z-20 bg-surface">
+<div class="flex items-center justify-center gap-8 w-full">
+<!-- Secondary Button: Retake -->
+<button class="flex flex-col items-center gap-2 group active:scale-95 transition-transform">
+<div class="w-14 h-14 rounded-full border-2 border-outline-variant bg-surface-container-highest text-on-surface flex items-center justify-center group-hover:border-primary-fixed-dim transition-colors shadow-md">
+<span class="material-symbols-outlined text-[24px]">replay</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase group-hover:text-primary-fixed-dim transition-colors">Repetir</span>
+</button>
+<!-- Primary Button: Capture -->
+<button class="relative flex items-center justify-center active:scale-90 transition-transform group">
+<!-- Outer ring for prominent touch area -->
+<div class="absolute inset-0 bg-primary-container/20 rounded-full scale-125 group-active:scale-110 transition-transform"></div>
+<div class="w-24 h-24 rounded-full bg-primary-container text-on-primary-container border-4 border-primary-fixed shadow-[0_4px_16px_rgba(255,184,0,0.3)] flex items-center justify-center z-10">
+<span class="material-symbols-outlined filled text-[48px]">photo_camera</span>
+</div>
+</button>
+<!-- Placeholder for balance, could be flash/settings in real app -->
+<button class="flex flex-col items-center gap-2 group active:scale-95 transition-transform opacity-50 cursor-not-allowed">
+<div class="w-14 h-14 rounded-full border-2 border-outline-variant bg-surface-container text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">flash_off</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Flash</span>
+</button>
+</div>
+</section>
+<!-- Thumbnail Strip -->
+<section class="w-full bg-surface-container border-t-2 border-outline-variant py-4 shrink-0 z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.5)]">
+<div class="px-margin-edge mb-2 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Capturas Realizadas</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">1 / 5</span>
+</div>
+<div class="flex gap-4 px-margin-edge overflow-x-auto pb-2 snap-x hide-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
+<!-- Item 1: Captured -->
+<div class="w-20 h-28 shrink-0 rounded-lg border-2 border-outline bg-surface-container-low overflow-hidden relative snap-center group">
+<div class="w-full h-full bg-cover bg-center opacity-70 mix-blend-luminosity grayscale group-hover:grayscale-0 transition-all" data-alt="A highly detailed industrial technical document captured on a rugged mobile device. The document contains complex schematic diagrams, dense barcode arrays, and official stamped inspection seals. The lighting is stark and directional, simulating a harsh field environment. The overall aesthetic is gritty, high-contrast, and utilitarian, utilizing deep blacks, stark whites, and vivid hazard orange accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbaBxn2fYal0oDhT5xMa52_81wOGebsd7Pf3sdaxqbcFnG5gm_6iSKB2lf6uCsiNTOCSTDmTZXAcUiSXNx7N_CUFVYwoDpV4PPJC28EVejdyePZDN6M8Hn5txHvwk1eXwTFOqfwA2bO-d9zkP50yfh9ulcGSo5QdNCdT5vkTPyIB_6kPNtEfOsW5MNSjRPmfNtAlcOcBlQ2dPvecNMsNf025vKhGxxuNuu9JXTsaboP7e8OCARQqLkPQ')"></div>
+<div class="absolute bottom-1 right-1 bg-surface-container-highest/90 border border-outline-variant rounded p-0.5 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container filled">check_circle</span>
+</div>
+</div>
+<!-- Item 2: Current (Pending) -->
+<div class="w-20 h-28 shrink-0 rounded-lg border-2 border-primary bg-surface-container-highest flex items-center justify-center snap-center relative shadow-[0_0_0_2px_rgba(255,184,0,0.2)]">
+<span class="font-data-lg text-data-lg text-primary animate-pulse">2</span>
+<div class="absolute bottom-1 w-full text-center">
+<div class="w-1 h-1 bg-primary rounded-full mx-auto"></div>
+</div>
+</div>
+<!-- Item 3: Empty -->
+<div class="w-20 h-28 shrink-0 rounded-lg border-2 border-dashed border-outline-variant bg-surface-container flex items-center justify-center snap-center">
+<span class="font-data-lg text-data-lg text-on-surface-variant opacity-50">3</span>
+</div>
+<!-- Item 4: Empty -->
+<div class="w-20 h-28 shrink-0 rounded-lg border-2 border-dashed border-outline-variant bg-surface-container flex items-center justify-center snap-center">
+<span class="font-data-lg text-data-lg text-on-surface-variant opacity-50">4</span>
+</div>
+<!-- Item 5: Empty -->
+<div class="w-20 h-28 shrink-0 rounded-lg border-2 border-dashed border-outline-variant bg-surface-container flex items-center justify-center snap-center">
+<span class="font-data-lg text-data-lg text-on-surface-variant opacity-50">5</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Final Action Button (Disabled state due to pending captures) -->
+<div class="fixed bottom-0 left-0 w-full p-4 bg-surface-container-high border-t-2 border-outline-variant z-50 pb-[max(16px,env(safe-area-inset-bottom))]">
+<button class="w-full h-touch-target bg-surface-container-highest text-on-surface-variant border-2 border-outline-variant rounded-lg font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 cursor-not-allowed opacity-80" disabled="">
+<span class="material-symbols-outlined text-[20px]">save</span>
+            Guardar Encuesta y Siguiente
+        </button>
+</div>
+</body></html>
