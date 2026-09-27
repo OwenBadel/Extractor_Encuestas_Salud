@@ -36,3 +36,7 @@ wheels/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Directivas agenticas y tooling local privado
+AGENTS.md
+.agents/
