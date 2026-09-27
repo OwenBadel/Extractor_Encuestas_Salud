@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Entornos y secretos
+.env
+.env.*
+!.env.example
+
+# Archivos pesados y zips de muestras
+*.zip
+*.tar.gz
+*.rar
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
