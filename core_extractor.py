@@ -30,7 +30,7 @@ load_dotenv(override=True)
 
 WEBHOOK_URL = os.getenv(
     "HEALTH_SURVEY_WEBHOOK_URL",
-    "https://script.google.com/macros/s/TU_DEPLOYMENT_ID/exec"
+    os.getenv("WEBHOOK_URL", "")
 )
 
 # Configuración Motor Inferencia Local (Ollama + MiniCPM-V 2.6 en GPU RTX 4060)

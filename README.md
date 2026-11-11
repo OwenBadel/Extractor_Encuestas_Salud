@@ -38,7 +38,7 @@ Solución de digitalización industrial y extracción multimodal para formulario
 ## 📂 Estructura del Proyecto
 
 ```text
-PROJ_003_Extractor_Encuestas_Salud/
+Extractor_Encuestas_Salud/
 ├── app.py                                <-- Servidor Backend FastAPI (Endpoints REST y SPA)
 ├── core_extractor.py                     <-- Motor multimodal, normalización y catálogo de 64 columnas
 ├── procesar_encuestas.py                 <-- CLI ejecutable para procesamiento local
